@@ -33,7 +33,7 @@ class Comment
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): int
     {
         $this->id = $id;
 
@@ -45,7 +45,7 @@ class Comment
         return $this->content;
     }
 
-    public function setContent(string $content)
+    public function setContent(string $content): string
     {
         $this->content = $content;
 
@@ -57,7 +57,7 @@ class Comment
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date)
+    public function setCreationDate(\DateTimeInterface $creation_date): \DateTimeInterface
     {
         $this->creation_date = $creation_date;
 
@@ -69,7 +69,7 @@ class Comment
         return $this->FK_user;
     }
 
-    public function setFKUser(?User $FK_user)
+    public function setFKUser(?User $FK_user): int
     {
         $this->FK_user = $FK_user;
 
@@ -81,7 +81,7 @@ class Comment
         return $this->FK_trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick)
+    public function setFKTrick(?Trick $FK_trick): int
     {
         $this->FK_trick = $FK_trick;
 
