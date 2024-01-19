@@ -39,7 +39,7 @@ class Trick
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -51,7 +51,7 @@ class Trick
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(string $description): static
     {
         $this->description = $description;
 
@@ -63,7 +63,7 @@ class Trick
         return $this->slug;
     }
 
-    public function setSlug(string $slug)
+    public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 
@@ -75,7 +75,7 @@ class Trick
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date)
+    public function setCreationDate(\DateTimeInterface $creation_date): static
     {
         $this->creation_date = $creation_date;
 
@@ -87,7 +87,7 @@ class Trick
         return $this->modification_date;
     }
 
-    public function setModificationDate(?\DateTimeInterface $modification_date)
+    public function setModificationDate(?\DateTimeInterface $modification_date): static
     {
         $this->modification_date = $modification_date;
 
@@ -99,7 +99,7 @@ class Trick
         return $this->FK_user;
     }
 
-    public function setFKUser(?User $FK_user)
+    public function setFKUser(?User $FK_user): static
     {
         $this->FK_user = $FK_user;
 

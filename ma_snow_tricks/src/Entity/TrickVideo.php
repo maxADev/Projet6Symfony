@@ -25,7 +25,7 @@ class TrickVideo
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -37,7 +37,7 @@ class TrickVideo
         return $this->link;
     }
 
-    public function setLink(string $link)
+    public function setLink(string $link): static
     {
         $this->link = $link;
 
@@ -49,7 +49,7 @@ class TrickVideo
         return $this->FK_trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick)
+    public function setFKTrick(?Trick $FK_trick): static
     {
         $this->FK_trick = $FK_trick;
 

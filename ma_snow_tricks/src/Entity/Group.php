@@ -25,7 +25,7 @@ class Group
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -37,7 +37,7 @@ class Group
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -49,7 +49,7 @@ class Group
         return $this->slug;
     }
 
-    public function setSlug(string $slug)
+    public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 

@@ -43,7 +43,7 @@ class User
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -55,7 +55,7 @@ class User
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -67,7 +67,7 @@ class User
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): static
     {
         $this->email = $email;
 
@@ -79,7 +79,7 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password)
+    public function setPassword(string $password): static
     {
         $this->password = $password;
 
@@ -91,7 +91,7 @@ class User
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date)
+    public function setCreationDate(\DateTimeInterface $creation_date): static
     {
         $this->creation_date = $creation_date;
 
@@ -103,7 +103,7 @@ class User
         return $this->modification_date;
     }
 
-    public function setModificationDate(?\DateTimeInterface $modification_date)
+    public function setModificationDate(?\DateTimeInterface $modification_date): static
     {
         $this->modification_date = $modification_date;
 
@@ -115,7 +115,7 @@ class User
         return $this->registration_token;
     }
 
-    public function setRegistrationToken(?string $registration_token)
+    public function setRegistrationToken(?string $registration_token): static
     {
         $this->registration_token = $registration_token;
 
@@ -127,7 +127,7 @@ class User
         return $this->reset_password_token;
     }
 
-    public function setResetPasswordToken(?string $reset_password_token)
+    public function setResetPasswordToken(?string $reset_password_token): static
     {
         $this->reset_password_token = $reset_password_token;
 
@@ -139,7 +139,7 @@ class User
         return $this->statut;
     }
 
-    public function setStatut(bool $statut)
+    public function setStatut(bool $statut): static
     {
         $this->statut = $statut;
 

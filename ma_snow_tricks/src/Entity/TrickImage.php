@@ -28,7 +28,7 @@ class TrickImage
         return $this->id;
     }
 
-    public function setId(int $id)
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -40,7 +40,7 @@ class TrickImage
         return $this->name;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -52,7 +52,7 @@ class TrickImage
         return $this->path;
     }
 
-    public function setPath(string $path)
+    public function setPath(string $path): static
     {
         $this->path = $path;
 
@@ -64,7 +64,7 @@ class TrickImage
         return $this->FK_trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick)
+    public function setFKTrick(?Trick $FK_trick): static
     {
         $this->FK_trick = $FK_trick;
 

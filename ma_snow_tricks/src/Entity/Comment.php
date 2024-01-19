@@ -57,7 +57,7 @@ class Comment
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): \DateTimeInterface
+    public function setCreationDate(\DateTimeInterface $creation_date): static
     {
         $this->creation_date = $creation_date;
 
