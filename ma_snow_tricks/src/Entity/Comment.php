@@ -33,7 +33,7 @@ class Comment
         return $this->id;
     }
 
-    public function setId(int $id): int
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -45,7 +45,7 @@ class Comment
         return $this->content;
     }
 
-    public function setContent(string $content): string
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
@@ -69,7 +69,7 @@ class Comment
         return $this->FK_user;
     }
 
-    public function setFKUser(?User $FK_user): int
+    public function setFKUser(?User $FK_user): static
     {
         $this->FK_user = $FK_user;
 
@@ -81,7 +81,7 @@ class Comment
         return $this->FK_trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick): int
+    public function setFKTrick(?Trick $FK_trick): static
     {
         $this->FK_trick = $FK_trick;
 
