@@ -22,11 +22,11 @@ class Comment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $FK_user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Trick $FK_trick = null;
+    private ?Trick $trick = null;
 
     public function getId(): ?int
     {
@@ -64,26 +64,26 @@ class Comment
         return $this;
     }
 
-    public function getFKUser(): ?User
+    public function getUser(): ?User
     {
-        return $this->FK_user;
+        return $this->user;
     }
 
-    public function setFKUser(?User $FK_user): static
+    public function setUser(?User $user): static
     {
-        $this->FK_user = $FK_user;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getFKTrick(): ?Trick
+    public function getTrick(): ?Trick
     {
-        return $this->FK_trick;
+        return $this->trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick): static
+    public function setTrick(?Trick $trick): static
     {
-        $this->FK_trick = $FK_trick;
+        $this->trick = $trick;
 
         return $this;
     }
