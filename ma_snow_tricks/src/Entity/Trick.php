@@ -14,6 +14,9 @@ class Trick
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 150)]
+    private ?string $name = null;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
@@ -28,11 +31,11 @@ class Trick
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $FK_user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Group $FK_group = null;
+    private ?Group $trick_group = null;
 
     public function getId(): ?int
     {
@@ -42,6 +45,18 @@ class Trick
     public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
@@ -94,26 +109,26 @@ class Trick
         return $this;
     }
 
-    public function getFKUser(): ?User
+    public function getUser(): ?User
     {
-        return $this->FK_user;
+        return $this->user;
     }
 
-    public function setFKUser(?User $FK_user): static
+    public function setUser(?User $user): static
     {
-        $this->FK_user = $FK_user;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getFKGroup(): ?Group
+    public function getTrickGroup(): ?Group
     {
-        return $this->FK_group;
+        return $this->trick_group;
     }
 
-    public function setFKGroup(?Group $FK_group): static
+    public function setTrickGroup(?Group $trick_group): static
     {
-        $this->FK_group = $FK_group;
+        $this->trick_group = $trick_group;
 
         return $this;
     }

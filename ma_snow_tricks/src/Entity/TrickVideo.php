@@ -18,7 +18,7 @@ class TrickVideo
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Trick $FK_trick = null;
+    private ?Trick $trick = null;
 
     public function getId(): ?int
     {
@@ -44,14 +44,14 @@ class TrickVideo
         return $this;
     }
 
-    public function getFKTrick(): ?Trick
+    public function getTrick(): ?Trick
     {
-        return $this->FK_trick;
+        return $this->trick;
     }
 
-    public function setFKTrick(?Trick $FK_trick): static
+    public function setTrick(?Trick $trick): static
     {
-        $this->FK_trick = $FK_trick;
+        $this->trick = $trick;
 
         return $this;
     }
