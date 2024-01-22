@@ -29,12 +29,12 @@ class GroupFixtures extends Fixture
         $manager->flush();
     }
 
-    public function createSlug($name)
+    public function createSlug(string $name)
     {
         return $this->noAccent(strtolower(str_replace([' ', "'"], '-', $name)));
     }
 
-    public function noAccent($value) {
+    public function noAccent(string $value) {
         $from = array(
             'à', 'á', 'â', 'ã', 'ä', 'å', 'æ',
             'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ',

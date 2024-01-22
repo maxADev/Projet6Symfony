@@ -94,7 +94,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function createSlug($name)
+    public function createSlug(string $name)
     {
         return strtolower(str_replace([' ', "'"], '-', $name));
     }

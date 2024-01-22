@@ -26,7 +26,7 @@ class UserFixtures extends Fixture
         $manager->flush();
     }
 
-    public function randomToken($length)
+    public function randomToken(string $length)
     {
         $alphabet = "0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";
         return substr(str_shuffle(str_repeat($alphabet, $length)), 0, $length);
