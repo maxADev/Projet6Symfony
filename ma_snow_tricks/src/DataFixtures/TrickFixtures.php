@@ -14,7 +14,7 @@ use DateTime;
 
 class TrickFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $date = new DateTime();
 
@@ -94,7 +94,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function createSlug(string $name)
+    public function createSlug(string $name): string
     {
         return strtolower(str_replace([' ', "'"], '-', $name));
     }
