@@ -19,7 +19,7 @@ class TrickImage
     #[ORM\Column(length: 150)]
     private ?string $path = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'trickImages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
 

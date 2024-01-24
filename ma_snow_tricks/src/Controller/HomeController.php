@@ -4,75 +4,42 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 
 class HomeController extends AbstractController
 {
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(): Response
     {
-        $image_list = [
-            [
-            'name' => 'mute_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'mute',
-            ],
-            [
-            'name' => 'nose_grab_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'nose-grab',
-            ],
-            [
-            'name' => 'truck_driver_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'truck-driver',
-            ],
-            [
-            'name' => '1080_ou_big_foot_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => '1080-ou-big-foot',
-            ],
-            [
-            'name' => 'hakon_flip_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'hakon-flip',
-            ],
-            [
-            'name' => 'corkscrew_ou_cork_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'corkscrew-ou-cork',
-            ],
-            [
-            'name' => 'rocket_air_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'rocket-air',
-            ],
-            [
-            'name' => 'melancholie_image.jpeg',
-            'path' => '/upload',
-            'trick_slug' => 'melancholie',
-            ],
-            [
-            'name' => 'tail_grab_image.jpg',
-            'path' => '/upload',
-            'trick_slug' => 'tail-grab',
-            ],
-            [
-            'name' => 'japan_image.jpeg',
-            'path' => '/upload',
-            'trick_slug' => 'japan',
-            ],
-        ];
+        return $this->render('home/homePage.html.twig');
+    }
 
-        foreach($image_list as $imageValue) {
+    public function showTrick(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $newTricklList = [];
 
-            $trick = $entityManager->getRepository(Trick::class)->findOneBy(['slug' => $imageValue['trick_slug']]);
+        $nbTrick = $request->request->get('nbTrick');
 
-            echo $trick->getId().'<br>';
+        $repository = $entityManager->getRepository(Trick::class);
+        $trickList = $repository->findBy([], ['id'=>'DESC'], 3, $nbTrick);
+
+        foreach ($trickList as $trick) {
+            $newTricklList[$trick->getId()]['name'] = $trick->getName();
+            $newTricklList[$trick->getId()]['slug'] = $trick->getSlug();
+            $listTrickImages = $trick->getTrickImages();
+            foreach ($listTrickImages as $trickImages) {
+                if (empty($newTricklList[$trick->getId()]['image']))
+                {
+                    $newTricklList[$trick->getId()]['image'] = $trickImages->getName();
+                }
+            }
         }
 
-        return $this->render('home/homePage.html.twig');
+        $newNbTrick = $nbTrick + 3;
+
+        return new JsonResponse(['listTrick' => $newTricklList, 'nbTrick' => $newNbTrick]);
     }
 }

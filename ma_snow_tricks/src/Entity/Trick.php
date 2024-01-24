@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +38,22 @@ class Trick
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Group $trick_group = null;
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickImage::class, orphanRemoval: true)]
+    private Collection $trickImages;
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickVideo::class, orphanRemoval: true)]
+    private Collection $trickVideos;
+
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->trickImages = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->trickVideos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -121,14 +139,92 @@ class Trick
         return $this;
     }
 
-    public function getTrickGroup(): ?Group
+    /**
+     * @return Collection<int, TrickImages>
+     */
+    public function getTrickImages(): Collection
     {
-        return $this->trick_group;
+        return $this->trickImages;
     }
 
-    public function setTrickGroup(?Group $trick_group): static
+    public function addTrickImages(TrickImage $trickImage): static
     {
-        $this->trick_group = $trick_group;
+        if (!$this->trickImages->contains($trickImage)) {
+            $this->trickImages->add($trickImage);
+            $trickImage->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickImages(TrickImage $trickImage): static
+    {
+        if ($this->trickImages->removeElement($trickImage)) {
+            // set the owning side to null (unless already changed)
+            if ($trickImage->getTrick() === $this) {
+                $trickImage->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TrickVideo>
+     */
+    public function getTrickVideos(): Collection
+    {
+        return $this->trickVideos;
+    }
+
+    public function addTrickVideo(TrickVideo $trickVideo): static
+    {
+        if (!$this->trickVideos->contains($trickVideo)) {
+            $this->trickVideos->add($trickVideo);
+            $trickVideo->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickVideo(TrickVideo $trickVideo): static
+    {
+        if ($this->trickVideos->removeElement($trickVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($trickVideo->getTrick() === $this) {
+                $trickVideo->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
+            }
+        }
 
         return $this;
     }

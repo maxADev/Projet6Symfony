@@ -21,7 +21,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
         // Get user by name
         $user = $manager->getRepository(User::class)->findOneBy(['name' => 'user0']);
 
-        $trick_list = [
+        $trickList = [
                         [
                          'name' => 'mute',
                          'description' => 'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
@@ -74,7 +74,7 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
                         ],
                       ];
 
-        foreach($trick_list as $trickValue) {
+        foreach($trickList as $trickValue) {
 
             // Get group by id
             $group = $manager->getRepository(Group::class)->findOneBy(['slug' => $trickValue['group']]);

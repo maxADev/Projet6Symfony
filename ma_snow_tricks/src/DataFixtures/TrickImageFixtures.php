@@ -14,7 +14,7 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $image_list = [
+        $imageList = [
                         [
                         'name' => 'mute_image.jpg',
                         'path' => '/upload',
@@ -67,7 +67,7 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
                         ],
                     ];
 
-        foreach($image_list as $imageValue) {
+        foreach($imageList as $imageValue) {
 
             $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $imageValue['trick_slug']]);
 

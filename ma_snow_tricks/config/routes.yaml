@@ -7,3 +7,11 @@ controllers:
 home_page:
     path: /
     controller: App\Controller\HomeController::index
+
+show_trick:
+    path: /showTrick
+    controller: App\Controller\HomeController::showTrick
+
+trick_page:
+    path: /trick/{slug}
+    controller: App\Controller\TrickController::index
