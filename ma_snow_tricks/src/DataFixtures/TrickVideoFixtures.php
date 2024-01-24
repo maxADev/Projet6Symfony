@@ -14,7 +14,7 @@ class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $video_list = [
+        $videoList = [
                         [
                         'link' => 'https://www.youtube.com/watch?v=jm19nEvmZgM',
                         'trick_slug' => 'mute',
@@ -57,7 +57,7 @@ class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
                         ],
                     ];
 
-        foreach($video_list as $videoValue) {
+        foreach($videoList as $videoValue) {
 
             $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $videoValue['trick_slug']]);
 

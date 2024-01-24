@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="container-fluid col-12 home-page-image mb-3">
+        <img src="{{ asset('assets/images/home-page-image.png') }}" class="col-8"/>
+        <h1 class="home-page-text">Snowboard Tricks</h1>
+        <a href="#trick-list" class="home-page-button"><i class="bi bi-arrow-down-square-fill"></i></a>
+    </div>
+    <h3 class="mt-3 text-center text-uppercase">Les tricks</h3>
+    <div id="trick-list" class="container-fluid col-12 scroll-page d-flex justify-content-around flex-wrap">
+        <div class="card col-2 mt-3" style="width: 18rem;">
+            {% for trickImage in trick.trickImages %}
+                <div class="card col-2 mt-3" style="width: 18rem;">
+                    <img class="card-img-top" src="{{asset('upload/'~ trickImage.name)}}" alt="Card image cap">
+                </div>
+            {% endfor %}
+            <div class="card-body">
+                <h5 class="card-title"><a href={{"/trick/#{trick.slug}"}}>{{trick.name}}</a></h5>
+            </div>
+             {% for comment in trick.comments %}
+                <div class="card col-2 mt-3" style="width: 18rem;">
+                    <p>{{comment.content}}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

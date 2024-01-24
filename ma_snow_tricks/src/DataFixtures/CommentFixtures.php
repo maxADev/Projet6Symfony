@@ -21,7 +21,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
         $user = $manager->getRepository(User::class)->findOneBy(['name' => 'user0']);
 
-        $comment_list = [
+        $commentList = [
                         [
                         'content' => 'Très bien',
                         'trick_slug' => 'mute',
@@ -64,7 +64,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
                         ],
                     ];
 
-        foreach($comment_list as $commentValue) {
+        foreach($commentList as $commentValue) {
 
             $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $commentValue['trick_slug']]);
 
