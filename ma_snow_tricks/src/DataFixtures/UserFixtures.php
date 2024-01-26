@@ -21,6 +21,7 @@ class UserFixtures extends Fixture
             $user->setRegistrationToken($this->randomToken(15));
             $user->setStatut(0);
             $manager->persist($user);
+            $this->addReference('User'.'_'.$i, $user);
         }
 
         $manager->flush();

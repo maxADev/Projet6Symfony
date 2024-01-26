@@ -58,13 +58,9 @@ class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
                     ];
 
         foreach($videoList as $videoValue) {
-
-            $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $videoValue['trick_slug']]);
-
             $trickVideo = new TrickVideo();
             $trickVideo->setLink($videoValue['link']);
-            $trickVideo->setTrick($trick);
-            $manager->persist($trick);
+            $trickVideo->setTrick($this->getReference($videoValue['trick_slug'], Trick::class));
             $manager->persist($trickVideo);
         }
             

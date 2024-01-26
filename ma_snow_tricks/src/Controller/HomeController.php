@@ -9,11 +9,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
+use App\Entity\User;
+use App\Entity\Group;
+use DateTime;
 
 class HomeController extends AbstractController
 {
-    public function index(): Response
-    {
+    public function index(EntityManagerInterface $entityManager): Response
+    {   
         return $this->render('home/homePage.html.twig');
     }
 
