@@ -10,6 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\DataFixtures\TrickFixtures;
 use App\DataFixtures\UserFixtures;
+use App\Factory\CommentFactory;
 use DateTime;
 
 class CommentFixtures extends Fixture implements DependentFixtureInterface
@@ -19,63 +20,41 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     {
         $date = new DateTime();
 
-        $user = $manager->getRepository(User::class)->findOneBy(['name' => 'user0']);
-
         $commentList = [
                         [
-                        'content' => 'Très bien',
                         'trick_slug' => 'mute',
                         ],
                         [
-                        'content' => 'Vraiment très impressionnant',
                         'trick_slug' => 'mute',
                         ],
                         [
-                        'content' => 'C\'est très risqué',
                         'trick_slug' => 'mute',
                         ],
                         [
-                        'content' => 'Bravo',
                         'trick_slug' => '1080-ou-big-foot',
                         ],
                         [
-                        'content' => 'La classe',
                         'trick_slug' => 'hakon-flip',
                         ],
                         [
-                        'content' => 'Je ne le ferait pas',
                         'trick_slug' => 'corkscrew-ou-cork',
                         ],
                         [
-                        'content' => 'C\'est ouff',
                         'trick_slug' => 'rocket-air',
                         ],
                         [
-                        'content' => 'Très fort, bravo',
                         'trick_slug' => 'melancholie',
                         ],
                         [
-                        'content' => 'Quelle figure de fou',
                         'trick_slug' => 'tail-grab',
                         ],
                         [
-                        'content' => 'Attention à la chute',
                         'trick_slug' => 'japan',
                         ],
                     ];
 
         foreach($commentList as $commentValue) {
-
-            $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $commentValue['trick_slug']]);
-
-            $comment = new Comment();
-            $comment->setContent($commentValue['content']);
-            $comment->setCreationDate($date);
-            $comment->setUser($user);
-            $comment->setTrick($trick);
-            $manager->persist($user);
-            $manager->persist($trick);
-            $manager->persist($comment);
+            CommentFactory::createMany(5, ['user' => $this->getReference('User_0', User::class), 'trick' => $this->getReference($commentValue['trick_slug'], Trick::class)]);
         }
             
         $manager->flush();

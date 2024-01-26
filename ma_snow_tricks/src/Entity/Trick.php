@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Util\SlugInterface;
+use App\Util\DateInterface;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
-class Trick
+#[ORM\HasLifecycleCallbacks]
+class Trick implements SlugInterface, DateInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,10 +38,6 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Group $trick_group = null;
-
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickImage::class, orphanRemoval: true)]
     private Collection $trickImages;
 
@@ -47,6 +46,10 @@ class Trick
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
+
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Group $trick_group = null;
 
     public function __construct()
     {
@@ -225,6 +228,18 @@ class Trick
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTrickGroup(): ?Group
+    {
+        return $this->trick_group;
+    }
+
+    public function setTrickGroup(?Group $trick_group): static
+    {
+        $this->trick_group = $trick_group;
 
         return $this;
     }

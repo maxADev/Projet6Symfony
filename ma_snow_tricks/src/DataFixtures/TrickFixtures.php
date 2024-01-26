@@ -18,9 +18,6 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
     {
         $date = new DateTime();
 
-        // Get user by name
-        $user = $manager->getRepository(User::class)->findOneBy(['name' => 'user0']);
-
         $trickList = [
                         [
                          'name' => 'mute',
@@ -76,20 +73,15 @@ class TrickFixtures extends Fixture implements DependentFixtureInterface
 
         foreach($trickList as $trickValue) {
 
-            // Get group by id
-            $group = $manager->getRepository(Group::class)->findOneBy(['slug' => $trickValue['group']]);
-
             $trick = new Trick();
             $trick->setName($trickValue['name']);
             $trick->setDescription($trickValue['description']);
-            $trick->setSlug($this->createSlug($trickValue['name']));
-            $trick->setCreationDate($date);
-            $trick->setUser($user);
-            $trick->setTrickGroup($group);
+            $trick->setUser($this->getReference('User_0', User::class));
+            $trick->setTrickGroup($this->getReference($trickValue['group'], Group::class));
 
-            $manager->persist($user);
-            $manager->persist($group);
             $manager->persist($trick);
+            
+            $this->addReference($trick->getSlug(), $trick);
         }
         $manager->flush();
     }

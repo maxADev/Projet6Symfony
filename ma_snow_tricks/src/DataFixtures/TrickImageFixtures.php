@@ -68,15 +68,10 @@ class TrickImageFixtures extends Fixture implements DependentFixtureInterface
                     ];
 
         foreach($imageList as $imageValue) {
-
-            $trick = $manager->getRepository(Trick::class)->findOneBy(['slug' => $imageValue['trick_slug']]);
-
             $trickImage = new TrickImage();
             $trickImage->setName($imageValue['name']);
             $trickImage->setPath($imageValue['path']);
-            $trickImage->setPath($imageValue['path']);
-            $trickImage->setTrick($trick);
-            $manager->persist($trick);
+            $trickImage->setTrick($this->getReference($imageValue['trick_slug'], Trick::class));
             $manager->persist($trickImage);
         }
             
