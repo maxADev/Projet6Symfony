@@ -11,10 +11,27 @@ ul li a {
     text-decoration: none!important;
 }
 
+ul li a:hover {
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.current-menu {
+    text-decoration: line-through!important;
+}
+
 .home-page-image {
     position: relative;
     text-align: center;
     background-color: rgba(0,0,0,0.05);
+}
+
+.home-image {
+    max-height: 750px;
+    transform: translateY(50px);
+    border-radius: 5px;
+    box-shadow: 0px 5px 15px 0px black;
 }
 
 .home-page-text {
@@ -29,31 +46,72 @@ ul li a {
     font-size: 100px;
 }
 
-.home-page-button {
+.home-page-down-button {
     position: absolute;
+    bottom: 5px;
+    right: 15px;
+    font-size: 35px;
+    color: white;
+}
+
+.home-page-up-button {
+    display: none;
+    position: fixed;
     bottom: 5px;
     right: 15px;
     font-size: 35px;
     color: black;
 }
 
+.card {
+    box-shadow: 15px 15px 20px 0px #5f5d5d;
+}
+
 .card-img-top {
-    height: 250px!important;
+    height: 150px!important;
 }
 
 #trick-list {
-    margin-bottom: 10%;
     min-height: 500px;
 }
 
 .trick-container {
+    padding-top: 50px;
     display: none;
 }
 
 .trick-card {
-    max-height: 350px;
+    max-height: 205px;
 }
 
 .text-loading {
     max-height: 25px;
+}
+
+@media screen and (max-width: 1200px) {
+    .home-page-text {
+        font-size: 85px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .home-page-text {
+        font-size: 65px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .home-page-text {
+        font-size: 50px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .home-page-text {
+        font-size: 30px;
+    }
+
+    .home-page-down-button {
+        color: black;
+    }
 }
