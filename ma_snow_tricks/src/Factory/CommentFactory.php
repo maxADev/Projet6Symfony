@@ -32,7 +32,6 @@ final class CommentFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
      *
-     * @todo inject services if required
      */
     public function __construct()
     {
@@ -42,15 +41,14 @@ final class CommentFactory extends ModelFactory
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
      *
-     * @todo add your default values here
      */
     protected function getDefaults(): array
     {
         return [
             'content' => self::faker()->text(250),
             'creation_date' => self::faker()->dateTime(),
-            'trick' => null, // TODO add App\Entity\Trick type manually
-            'user' => null, // TODO add App\Entity\User type manually
+            'trick' => null, // add App\Entity\Trick type manually
+            'user' => null, // add App\Entity\User type manually
         ];
     }
 
