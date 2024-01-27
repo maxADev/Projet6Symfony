@@ -23,6 +23,9 @@ class User
     #[ORM\Column(length: 60)]
     private ?string $password = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $image = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creation_date = null;
 
@@ -82,6 +85,18 @@ class User
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

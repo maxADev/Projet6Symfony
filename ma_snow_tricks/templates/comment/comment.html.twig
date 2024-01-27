@@ -1,0 +1,39 @@
+{% if comments|length > 0 %}
+    <div class="container col-12 m-0">
+        <h5 class="m-0">Les commentaires</h5>
+    </div>
+    <div class="container trick-comment-container col-12">
+        {% for comment in comments %}
+        <div class="container col-12 col-sm-12 col-lg-9 col-xl-9 d-flex justify-content-center flex-wrap align-items-center comment-container mt-3">
+                <div class="container col-4 col-sm-4 col-lg-4 col-xl-2 m-0">
+                {% if comment.user.image|length > 0 %}
+                    <img class="user-image" src="{{asset('upload/'~ comment.user.image)}}" alt="Card image cap">
+                {% else %}
+                    <img class="user-image" src="{{asset('assets/images/user-no-image.jpg')}}" alt="Card image cap">
+                {% endif %}
+                    <p class="m-0">{{comment.user.name}}</p>
+                    <p class="m-0">Le {{comment.creationDate|date("d/m/Y")}}</p>
+                </div>
+            <div class="container col-8 col-sm-7 col-lg-8 col-xl-9 m-0">
+                <p class="m-0">{{comment.content}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container-fluid col-8 mt-3 mb-3 d-flex justify-content-around flex-wrap">
+        {% if previous >= 0 %}
+        <div class="col-5">
+            <a href="{{ path('trick', { slug: trick.slug, offset: previous }) }}">Retour</a>
+        </div>
+        {% endif %}
+        {% if next < comments|length %}
+        <div class="col-5">
+            <a href="{{ path('trick', { slug: trick.slug, offset: next }) }}">Page suivante</a>
+        </div>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="container col-12 m-0">
+        <h5 class="m-0">Aucun commentaire</h5>
+    </div>
+{% endif %}
