@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CommentRepository;
 
 class TrickController extends AbstractController
 {
@@ -46,16 +47,27 @@ class TrickController extends AbstractController
             }
         }
 
+        if($nbTrick == 0)
+        {
+            $nbTrick = 5;
+        }
+
         $newNbTrick = $nbTrick + 5;
 
         return new JsonResponse(['listTrick' => $newTricklList, 'nbTrick' => $newNbTrick]);
     }
 
-    #[Route('/trick/{slug}')]
-    public function showTrick(Trick $trick): Response
+    #[Route('/trick/{slug}', name: 'trick')]
+    public function showTrick(Request $request, Trick $trick, CommentRepository $commentRepository): Response
     {
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $commentRepository->getCommentPaginator($trick, $offset);
+
         return $this->render('trick/trickPage.html.twig', [
             'trick' => $trick,
+            'comments' => $paginator,
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 }

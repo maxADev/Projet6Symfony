@@ -46,6 +46,18 @@ ul li a:hover {
     font-size: 100px;
 }
 
+.trick-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-transform: uppercase;
+    width: 100%;
+    color: black;
+    background-color: white;
+    font-size: 50px;
+}
+
 .home-page-down-button {
     position: absolute;
     bottom: 5px;
@@ -67,7 +79,11 @@ ul li a:hover {
     box-shadow: 15px 15px 20px 0px #5f5d5d;
 }
 
-.card-img-top {
+.home-card-img {
+    height: 150px!important;
+}
+
+.trick-card-img {
     height: 150px!important;
 }
 
@@ -88,6 +104,37 @@ ul li a:hover {
     max-height: 25px;
 }
 
+.user-image {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.comment-container {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.show-trick-asset-container {
+    display: none;
+}
+
+.hide-trick-asset {
+    display: none!important;
+}
+
+.hide-trick-asset-block {
+    display: block!important;
+}
+
+.trick-asset-container {
+    display: flex;
+}
+
+.read-trick-image {
+    max-height: 650px;
+}
+
 @media screen and (max-width: 1200px) {
     .home-page-text {
         font-size: 85px;
@@ -97,6 +144,18 @@ ul li a:hover {
 @media screen and (max-width: 992px) {
     .home-page-text {
         font-size: 65px;
+    }
+
+    .trick-asset-container {
+        display: none;
+    }
+
+    .show-trick-asset-container {
+        display: block;
+    }
+
+    .display-flex {
+        display: flex;
     }
 }
 
