@@ -14,8 +14,8 @@ use App\Repository\CommentRepository;
 
 class TrickController extends AbstractController
 {
-    #[Route('/')]
-    public function index(EntityManagerInterface $entityManager): Response
+    #[Route('/', name: 'home')]
+    public function index(): Response
     {   
         return $this->render('home/homePage.html.twig');
     }

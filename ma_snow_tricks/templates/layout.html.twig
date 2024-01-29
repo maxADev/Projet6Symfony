@@ -14,8 +14,13 @@
             <ul class="menu m-0 p-3">
                 <li class="p-3"><a href="/">Accueil</a></li>
                 <li class="p-3"><a href="/trick">Tricks</a></li>
-                <li class="p-3"><a href="/registration">Inscription</a></li>
-                <li class="p-3"><a href="/login">Connexion</a></li>
+                {% if app.user %}
+                    <li class="p-3"><a href="{{ path('account') }}">Mon Compte</a></li>
+                    <li class="p-3"><a href="{{ path('app_logout') }}">Deconnexion</a></li>
+                {% else %}
+                    <li class="p-3"><a href="/registration">Inscription</a></li>
+                    <li class="p-3"><a href="/login">Connexion</a></li>
+                {% endif %}
             </ul>
         </div>
         {% block content %}{% endblock %}
