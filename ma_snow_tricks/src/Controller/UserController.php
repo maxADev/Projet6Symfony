@@ -94,23 +94,18 @@ class UserController extends AbstractController
         return $this->render('user/account.html.twig');
     }
 
-    public function uploadUserImage($image, $slugger) {
+    public function uploadUserImage($image, $slugger): string {
         $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $slugger->slug($originalFilename);
         $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-        try {
-            $image->move(
-                $this->getParameter('upload_directory'),
-                $newFilename
-            );
-        } catch (FileException $e) {
-            echo $e;
-        }
-
+        $image->move(
+            $this->getParameter('upload_directory'),
+            $newFilename
+        );
         return $newFilename;
     }
 
-    public function sendEmailRegistration($userEmail, $confirmRegistrationPage, $mailer) {
+    public function sendEmailRegistration($userEmail, $confirmRegistrationPage, $mailer): void {
         $email = (new Email())
         ->to($userEmail)
         ->subject('Confirmation d\'inscription')

@@ -22,6 +22,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $metadata->addConstraint(new UniqueEntity([
             'fields' => 'name',
+        ]));
+
+        $metadata->addConstraint(new UniqueEntity([
             'fields' => 'email',
         ]));
 

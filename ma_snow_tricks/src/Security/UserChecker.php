@@ -16,7 +16,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if ($user->isStatut() != true || $user->getRegistrationToken() != null) {
+        if ($user->isStatut() !== true || $user->getRegistrationToken() !== null) {
             // the message passed to this exception is meant to be displayed to the user
             throw new CustomUserMessageAccountStatusException('Votre compte n\'est pas validé, cliquez sur le lien dans le mail que vous avez reçu');
         }
