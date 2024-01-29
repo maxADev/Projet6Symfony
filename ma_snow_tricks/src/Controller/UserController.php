@@ -94,7 +94,7 @@ class UserController extends AbstractController
         return $this->render('user/account.html.twig');
     }
 
-    public function uploadUserImage(File $image, SluggerInterface $slugger): ?string {
+    public function uploadUserImage(Image $image, SluggerInterface $slugger): string {
         $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $slugger->slug($originalFilename);
         $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
