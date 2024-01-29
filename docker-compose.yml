@@ -29,6 +29,16 @@ services:
         networks:
             - projet6
 
+    # mailhog container
+    mailhog:
+        image: mailhog/mailhog:latest
+        restart: always
+        ports:
+        - 1025:1025
+        - 8025:8025
+        networks:
+            - projet6
+
     # Symfony apache project container
     www:
         build: docker/php
