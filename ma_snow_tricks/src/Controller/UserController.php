@@ -17,6 +17,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\Image;
 
 class UserController extends AbstractController
 {
