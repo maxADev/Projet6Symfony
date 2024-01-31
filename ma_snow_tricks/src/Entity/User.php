@@ -198,9 +198,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->reset_password_token;
     }
 
-    public function setResetPasswordToken(?string $reset_password_token): static
+    public function setResetPasswordToken(?bool $reset_password_token): static
     {
-        $this->reset_password_token = $reset_password_token;
+        $this->reset_password_token = null;
+
+        if ($reset_password_token) {
+            $this->reset_password_token = ByteString::fromRandom(60);
+        }
 
         return $this;
     }
