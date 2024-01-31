@@ -16,6 +16,7 @@
         <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <button class="btn btn-lg btn-primary mt-3" type="submit">Connexion</button>
+        <a href="{{ path('change_password_request') }}">J'ai oublié mon mot de passe</a>;
     </form>
 </div>
 {% endblock %}
