@@ -4,8 +4,12 @@
         <div class="card col-12 col-sm-9 col-lg-7 col-xl-7 mt-3 text-center">
             {% set firstTrickImage = trick.trickImages|first %}
             <div class="card col-12">
-                <img class="card-img-top read-trick-image" src="{{asset('upload/'~ firstTrickImage.name)}}" alt="Card image cap">
-                 <h5 class="trick-title">{{trick.name}}</h5>
+                {% if firstTrickImage %}
+                    <img class="card-img-top read-trick-image" src="{{asset('upload/'~ firstTrickImage.name)}}" alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top read-trick-image" src="{{asset('assets/images/trick-no-image.jpg')}}" alt="Card image cap">
+                {% endif %}
+                <h5 class="trick-title">{{trick.name}}</h5>
             </div>
             <div class="container show-trick-asset-container col-12 mt-3 text-center">
                 <button type="button" class="btn btn-primary m-auto show-trick-asset">Voir les médias</button>

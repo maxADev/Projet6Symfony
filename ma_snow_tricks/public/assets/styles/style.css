@@ -18,7 +18,8 @@ ul li a:hover {
 }
 
 .current-menu {
-    text-decoration: line-through!important;
+    border-bottom: 1px solid white;
+    padding: 5px;
 }
 
 .home-page-image {
@@ -133,6 +134,17 @@ ul li a:hover {
 
 .read-trick-image {
     max-height: 650px;
+}
+
+.close-flash-message {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 @media screen and (max-width: 1200px) {
