@@ -62,6 +62,12 @@ class UserController extends AbstractController
             // Send Email End
 
             $entityManager->flush($user);
+
+            $this->addFlash(
+                'success',
+                'Un email vous a été envoyé pour valider votre compte',
+            );
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -82,6 +88,11 @@ class UserController extends AbstractController
         $user->setStatut(1);
         $entityManager->flush();
 
+        $this->addFlash(
+            'success',
+            'Votre compte a bien été validé',
+        );
+
         return $this->redirectToRoute('app_login');
     }
 
@@ -89,6 +100,11 @@ class UserController extends AbstractController
     public function userAccount(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $this->addFlash(
+            'success',
+            'Vous êtes bien connecté',
+        );
 
         $user = $this->getUser();
 

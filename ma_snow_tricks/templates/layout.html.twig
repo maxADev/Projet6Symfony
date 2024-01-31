@@ -23,6 +23,14 @@
                 {% endif %}
             </ul>
         </div>
+        {% for label, messages in app.flashes(['success', 'warning']) %}
+            {% for message in messages %}
+                <div class="col-5 m-auto bg-{{ label }} text-white mt-3 p-3 rounded">
+                    <span class="close-flash-message">&times;</span> 
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         {% block content %}{% endblock %}
         <footer>
             <script type="text/javascript" src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>

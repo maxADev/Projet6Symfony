@@ -39,6 +39,10 @@ $(document).ready(function() {
         $(this).removeClass('hide-trick-asset-block');
     });
 
+    $(document).on('click', '.close-flash-message', function() {
+        $(this).parent().hide();
+    });
+
     // Load trick function
     function loadTrick() {
         $('.home-page-down-button').hide();
@@ -56,8 +60,12 @@ $(document).ready(function() {
                 trickList = msg['listTrick'];
                 trickCard = '';
                 $.each(trickList, function (key, val) {
+                    trickImageValue = "/assets/images/trick-no-image.jpg";
                     trickCard += '<div class="card trick-card col-9 col-sm-5 col-lg-2 col-xl-2 m-1 mt-5">';
-                        trickCard += '<img class="card-img-top home-card-img" src="/upload/'+trickList[key].image+'" alt="Card image cap"/>';
+                    if(trickList[key].image) {
+                        trickImageValue = "/upload/"+trickList[key].image;
+                    }
+                        trickCard += '<img class="card-img-top home-card-img" src="'+trickImageValue+'" alt="Card image cap"/>';
                         trickCard += '<div class="card-body">';
                             trickCard += '<h5 class="card-title"><a href="/trick/'+trickList[key].slug+'">'+trickList[key].name+'</a></h5>';
                         trickCard += '</div>';
