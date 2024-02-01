@@ -263,7 +263,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->cgu;
     }
 
-    public function setCgu($cgu): static
+    public function setCgu(bool $cgu): static
     {
         $this->cgu = $cgu;
 
@@ -352,7 +352,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     }
 
 
-    public function hashPassword()
+    public function hashPassword(): void
     {
         $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
         $this->password = $hashedPassword;
