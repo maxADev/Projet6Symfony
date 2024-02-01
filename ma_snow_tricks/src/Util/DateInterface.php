@@ -6,9 +6,9 @@ interface  DateInterface
 {
     public function setCreationDate(): static;
 
-    public function getCreationDate(): static;
+    public function getCreationDate(): ?\DateTimeInterface;
 
     public function setModificationDate(): static;
 
-    public function getModificationDate(): static;
+    public function getModificationDate(): ?\DateTimeInterface;
 }
