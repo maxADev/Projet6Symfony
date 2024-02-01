@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Service;
-
+namespace App\Model;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-class SlugCreator
+trait SlugTrait
 {
     public function createSlug(string $str): string
     {

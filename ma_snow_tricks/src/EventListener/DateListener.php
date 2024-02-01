@@ -2,33 +2,35 @@
 
 namespace App\EventListener;
 
-use App\Entity\Trick;
-use App\Entity\Group;
-use App\Service\DateCreator;
 use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
+use App\Util\DateInterface;
 
 #[AsDoctrineListener('prePersist'/*, 500, 'default'*/)]
+#[AsDoctrineListener('preUpdate'/*, 500, 'default'*/)]
 class DateListener
 {
-    private ?DateCreator $dateCreator;
-
-    public function __construct()
-    {
-        $this->dateCreator = new DateCreator();
-    }
-
     public function prePersist(PrePersistEventArgs $args): void
     {
         $entity = $args->getObject();
-        $checkClass = get_class($entity);
-        $classList = ['App\Entity\TrickImage', 'App\Entity\TrickVideo', 'App\Entity\Group'];
-     
-        if (in_array($checkClass, $classList)) {
+
+        if (!$entity instanceof DateInterface) {
             return;
         }
 
-        $entity->setCreationDate($this->dateCreator->getDate());
+        $entity->setCreationDate();
+    }
+
+    public function preUpdate(PreUpdateEventArgs $args): void
+    {
+        $entity = $args->getObject();
+       
+        if (!$entity instanceof DateInterface) {
+            return;
+        }
+
+        $entity->setModificationDate();
     }
 }

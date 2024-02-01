@@ -14,17 +14,28 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Form\Type\UserType;
 use App\Form\Type\PasswordRequestType;
 use App\Form\Type\ChangePasswordType;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Image;
+use App\Service\EmailService;
+use App\Service\RegistrationService;
+use App\Service\ConfirmUserService;
+use App\Service\TokenService;
+use App\Service\ChangePasswordService;
 
 class UserController extends AbstractController
 {
+    public function __construct(
+        private RegistrationService $registrationService,
+        private ConfirmUserService $confirmUserService,
+        private EmailService $emailService,
+        private TokenService $tokenService,
+        private ChangePasswordService $changePasswordService,
+    ) {
+    }
+
     #[Route('/registration')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, SluggerInterface $slugger): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Check if user is logged Start
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -38,40 +49,17 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword(),
-            );
-            $user->setPassword($hashedPassword);
-            $user->setRegistrationToken(true);
-            $user->setStatut(0);
-
-            // Upload Image Start
-            $image = $form->get('image')->getData();
-            if ($image) {
-                $newFilename = $this->uploadUserImage($image, $slugger);
-                $user->setImage($newFilename);
-            }
-            // Upload Image End
-
+            $this->registrationService->userRegister($user);
             $entityManager->persist($user);
-            $confirmRegistrationPage = $this->generateUrl('confirm_registration', [
-                'registration_token' => $user->getRegistrationToken(),
-            ]);
-
-            // Send Email Start
-            $subject = 'Confirmation d\'inscription';
-            $content = '<h5>Cliquez sur le lien suivant pour valider votre inscription : </h5><a href="'.$confirmRegistrationPage.'">Confirmer</a>';
-            $this->sendEmail($user->getEmail(), $subject, $content, $mailer);
-            // Send Email End
-
             $entityManager->flush($user);
 
             $this->addFlash(
                 'success',
                 'Un email vous a été envoyé pour valider votre compte',
             );
-
+            
+            $confirmRegistrationPage = $this->generateUrl('confirm_registration', ['registrationToken' => $user->getRegistrationToken(),]);
+            $this->emailService->sendEmail($user->getEmail(), 'Confirmation d\'inscription', '<h5>Cliquez sur le lien suivant pour valider votre inscription : </h5><a href="'.$confirmRegistrationPage.'">Confirmer</a>');
             return $this->redirectToRoute('app_login');
         }
 
@@ -80,16 +68,10 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/confirm-registration/{registration_token}', name: 'confirm_registration')]
-    public function confirmRegistration(Request $request, EntityManagerInterface $entityManager, User $user): Response
+    #[Route('/confirm-registration/{registrationToken}', name: 'confirm_registration')]
+    public function confirmRegistration(EntityManagerInterface $entityManager, User $user): Response
     {
-        if (!$user) {
-            throw $this->createNotFoundException(
-                'Aucun utilisateur trouvé',
-            );
-        }
-        $user->setRegistrationToken(false);
-        $user->setStatut(1);
+        $this->confirmUserService->userConfirm($user);
         $entityManager->flush();
 
         $this->addFlash(
@@ -116,7 +98,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/change-password-request', name: 'change_password_request')]
-    public function changePasswordRequest(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    public function changePasswordRequest(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PasswordRequestType::class);
         $form->handleRequest($request);
@@ -131,18 +113,15 @@ class UserController extends AbstractController
                 );
             }
 
-            $user->setResetPasswordToken(true);
+            $user->generateResetPasswordToken();
+            $user->setResetPasswordTokenDate();
             $entityManager->flush();
 
             $changePasswordUrl = $this->generateUrl('change_password', [
-                'reset_password_token' => $user->getResetPasswordToken(),
+                'resetPasswordToken' => $user->getResetPasswordToken(),
             ]);
-            
-            // Send Email Start
-            $subject = 'Changer votre mot de passe';
-            $content = '<h5>Cliquez sur le lien suivant pour changer votre mot de passe : </h5><a href="'.$changePasswordUrl.'">Changer mon mot de passe</a>';
-            $this->sendEmail($user->getEmail(), $subject, $content, $mailer);
-            // Send Email End
+
+            $this->emailService->sendEmail($user->getEmail(), 'Changer votre mot de passe', '<h5>Cliquez sur le lien suivant pour changer votre mot de passe : </h5><a href="'.$changePasswordUrl.'">Changer mon mot de passe</a>');
 
             $this->addFlash(
                 'success',
@@ -155,24 +134,22 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/change-password/{reset_password_token}', name: 'change_password')]
-    public function changePassword(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/change-password/{resetPasswordToken}', name: 'change_password')]
+    public function changePassword(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        if (!$user) {
-            throw $this->createNotFoundException(
-                'Ce compte n\'existe pas'
-            );
-        }
-
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword(),
+        if (!$this->tokenService->checkValidationToken($user->getResetPasswordTokenDate())) {
+            $this->addFlash(
+                'danger',
+                'Le token à expiré, veuillez recommencer',
             );
-            $user->setPassword($hashedPassword);
+            return $this->redirectToRoute('change_password_request');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->changePasswordService->changePassword($user);
             $entityManager->flush();
 
             $this->addFlash(
@@ -186,24 +163,5 @@ class UserController extends AbstractController
         return $this->render('user/changePassword.html.twig', [
             'form' => $form,
         ]);
-    }
-
-    public function uploadUserImage(Image $image, SluggerInterface $slugger): string {
-        $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = $slugger->slug($originalFilename);
-        $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-        $image->move(
-            $this->getParameter('upload_directory'),
-            $newFilename
-        );
-        return $newFilename;
-    }
-
-    public function sendEmail(String $userEmail, String $subject, String $content, MailerInterface $mailer): void {
-        $email = (new Email())
-        ->to($userEmail)
-        ->subject($subject)
-        ->html($content);
-        $mailer->send($email);
     }
 }

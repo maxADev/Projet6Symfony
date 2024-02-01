@@ -4,7 +4,11 @@ namespace App\Util;
 
 interface  DateInterface
 {
-    public function setCreationDate(\DateTimeInterface $creation_date): static;
+    public function setCreationDate(): static;
+
+    public function getCreationDate(): ?\DateTimeInterface;
+
+    public function setModificationDate(): static;
 
     public function getModificationDate(): ?\DateTimeInterface;
 }
