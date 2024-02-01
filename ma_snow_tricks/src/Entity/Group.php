@@ -7,12 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Util\SlugInterface;
+use App\Model\SlugTrait;
 
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\Table(name: '`group`')]
 #[ORM\HasLifecycleCallbacks]
 class Group implements SlugInterface
 {
+    use SlugTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -63,7 +66,7 @@ class Group implements SlugInterface
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $slug;
+        $this->slug = $this->createSlug($slug);
 
         return $this;
     }

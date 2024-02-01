@@ -2,7 +2,7 @@
 
 namespace App\Util;
 
-interface  SlugInterface
+interface SlugInterface
 {
     public function getSlug(): ?string;
 

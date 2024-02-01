@@ -23,7 +23,7 @@
                 {% endif %}
             </ul>
         </div>
-        {% for label, messages in app.flashes(['success', 'warning']) %}
+        {% for label, messages in app.flashes(['success', 'danger']) %}
             {% for message in messages %}
                 <div class="col-5 m-auto bg-{{ label }} text-white mt-3 p-3 rounded">
                     <span class="close-flash-message">&times;</span> 

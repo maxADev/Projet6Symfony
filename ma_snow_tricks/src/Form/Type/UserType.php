@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 
@@ -18,7 +19,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' =>  'Nom',
+                'label' =>  'Nom d\'utilisateur',
             ])
             ->add('email', TextType::class, [
                 'label' =>  'Email',
@@ -29,20 +30,8 @@ class UserType extends AbstractType
             ->add('confirmPassword', PasswordType::class, [
                 'label' =>  'Confirmation Mot de passe',
             ])
-            ->add('image', FileType::class, [
-                'label' =>  'Image',
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/png',
-                            'image/jpg',
-                            'image/jpeg',
-                        ],
-                        'mimeTypesMessage' => 'Le format n\'est pas valide',
-                    ])
-                ],
+            ->add('cgu', CheckboxType::class, [
+                'label' =>  'Accepter les Conditions générales d\'utilisation',
             ])
             ->add('save', SubmitType::class, ['label' => 'Valider'])
         ;

@@ -9,11 +9,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Util\SlugInterface;
 use App\Util\DateInterface;
+use App\Model\SlugTrait;
+use App\Model\DateTrait;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Trick implements SlugInterface, DateInterface
 {
+    use SlugTrait;
+    use DateTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -101,31 +106,31 @@ class Trick implements SlugInterface, DateInterface
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $slug;
+        $this->slug = $this->createSlug($slug);
 
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
+    public function getCreationDate(): static
     {
         return $this->creation_date;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): static
+    public function setCreationDate(): static
     {
-        $this->creation_date = $creation_date;
+        $this->creation_date = $this->createDateTime();
 
         return $this;
     }
 
-    public function getModificationDate(): ?\DateTimeInterface
+    public function getModificationDate(): static
     {
         return $this->modification_date;
     }
 
-    public function setModificationDate(?\DateTimeInterface $modification_date): static
+    public function setModificationDate(): static
     {
-        $this->modification_date = $modification_date;
+        $this->modification_date = $this->createDateTime();
 
         return $this;
     }

@@ -10,16 +10,26 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Util\DateInterface;
+use App\Model\DateTrait;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInterface
 {
+    use DateTrait;
+
     public static function loadValidatorMetadata(ClassMetadata $metadata): void
     {
+        $metadata->addPropertyConstraint('name', new NotBlank());
+        $metadata->addPropertyConstraint('email', new NotBlank());
+        $metadata->addPropertyConstraint('password', new NotBlank());
+        $metadata->addPropertyConstraint('confirmPassword', new NotBlank());
+
         $metadata->addConstraint(new UniqueEntity([
             'fields' => 'name',
         ]));
@@ -28,7 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'fields' => 'email',
         ]));
 
-        $metadata->addPropertyConstraint('confirm_password', new EqualTo([
+        $metadata->addPropertyConstraint('confirmPassword', new EqualTo([
             'propertyPath' => 'password',
             'message' => 'Les mots de passes sont différents',
         ]));
@@ -59,25 +69,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 60)]
     private ?string $password = null;
 
-    private ?string $confirm_password = null;
+    private ?string $confirmPassword = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creation_date = null;
+    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $modification_date = null;
+    private ?\DateTimeInterface $modificationDate = null;
 
     #[ORM\Column(length: 60, nullable: true)]
-    private ?string $registration_token = null;
+    private ?string $registrationToken = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $registrationTokenDate = null;
 
     #[ORM\Column(length: 60, nullable: true)]
-    private ?string $reset_password_token = null;
+    private ?string $resetPasswordToken = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $resetPasswordTokenDate = null;
 
     #[ORM\Column]
     private ?bool $statut = null;
+
+    private $cgu = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    private ?\DateTimeInterface $cguDate = null;
 
     private ?bool $roles = null;
 
@@ -131,12 +152,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getConfirmPassword(): ?string
     {
-        return $this->confirm_password;
+        return $this->confirmPassword;
     }
 
-    public function setConfirmPassword(string $confirm_password): static
+    public function setConfirmPassword(string $confirmPassword): static
     {
-        $this->confirm_password = $confirm_password;
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }
@@ -153,58 +174,74 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
+    public function getCreationDate(): static
     {
-        return $this->creation_date;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): static
+    public function setCreationDate(): static
     {
-        $this->creation_date = $creation_date;
+        $this->creationDate = $this->createDateTime();
 
         return $this;
     }
 
-    public function getModificationDate(): ?\DateTimeInterface
+    public function getModificationDate(): static
     {
-        return $this->modification_date;
+        return $this->modificationDate;
     }
 
-    public function setModificationDate(?\DateTimeInterface $modification_date): static
+    public function setModificationDate(): static
     {
-        $this->modification_date = $modification_date;
+        $this->modificationDate = $this->createDateTime();
 
         return $this;
     }
 
     public function getRegistrationToken(): ?string
     {
-        return $this->registration_token;
+        return $this->registrationToken;
     }
 
-    public function setRegistrationToken(?bool $registration_token): static
+    public function setRegistrationToken(?string $registrationToken): static
     {
-        $this->registration_token = null;
+        $this->registrationToken = $registrationToken;
 
-        if ($registration_token) {
-            $this->registration_token = ByteString::fromRandom(60);
-        }
+        return $this;
+    }
+
+    public function getRegistrationTokenDate(): ?string
+    {
+        return $this->registrationTokenDate;
+    }
+
+    public function setRegistrationTokenDate(): static
+    {
+        $this->registrationTokenDate = $this->createDateTime();
 
         return $this;
     }
 
     public function getResetPasswordToken(): ?string
     {
-        return $this->reset_password_token;
+        return $this->resetPasswordToken;
     }
 
-    public function setResetPasswordToken(?bool $reset_password_token): static
+    public function setResetPasswordToken(?string $resetPasswordToken): static
     {
-        $this->reset_password_token = null;
+        $this->resetPasswordToken = $resetPasswordToken;
 
-        if ($reset_password_token) {
-            $this->reset_password_token = ByteString::fromRandom(60);
-        }
+        return $this;
+    }
+
+    public function getResetPasswordTokenDate(): ?\DateTimeInterface
+    {
+        return $this->resetPasswordTokenDate;
+    }
+
+    public function setResetPasswordTokenDate(): static
+    {
+        $this->resetPasswordTokenDate = $this->createDateTime();
 
         return $this;
     }
@@ -217,6 +254,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatut(bool $statut): static
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getCgu(): ?string
+    {
+        return $this->cgu;
+    }
+
+    public function setCgu($cgu): static
+    {
+        $this->cgu = $cgu;
+
+        return $this;
+    }
+
+    public function getCguDate(): ?string
+    {
+        return $this->cguDate;
+    }
+
+    public function setCguDate(): static
+    {
+        $this->cguDate = $this->createDateTime();
 
         return $this;
     }
@@ -268,5 +329,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function generateRegistrationToken(): void
+    {
+        $this->registrationToken = ByteString::fromRandom(60);
+    }
+
+    public function removeRegistrationToken(): void
+    {
+        $this->registrationToken = null;
+    }
+
+    public function generateResetPasswordToken(): void
+    {
+        $this->resetPasswordToken = ByteString::fromRandom(60);
+    }
+
+    public function removeResetPasswordToken(): void
+    {
+        $this->resetPasswordToken = null;
+    }
+
+
+    public function hashPassword()
+    {
+        $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+        $this->password = $hashedPassword;
     }
 }
