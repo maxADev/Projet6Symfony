@@ -111,7 +111,7 @@ class Trick implements SlugInterface, DateInterface
         return $this;
     }
 
-    public function getCreationDate(): static
+    public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creation_date;
     }
@@ -123,7 +123,7 @@ class Trick implements SlugInterface, DateInterface
         return $this;
     }
 
-    public function getModificationDate(): static
+    public function getModificationDate(): ?\DateTimeInterface
     {
         return $this->modification_date;
     }

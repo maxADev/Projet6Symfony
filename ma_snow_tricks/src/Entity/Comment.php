@@ -55,7 +55,7 @@ class Comment
         return $this;
     }
 
-    public function getCreationDate(): static
+    public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creation_date;
     }

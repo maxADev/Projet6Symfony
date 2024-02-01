@@ -174,7 +174,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getCreationDate(): static
+    public function getCreationDate(): ?\DateTimeInterface
     {
         return $this->creationDate;
     }
@@ -186,7 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getModificationDate(): static
+    public function getModificationDate(): ?\DateTimeInterface
     {
         return $this->modificationDate;
     }
@@ -210,7 +210,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getRegistrationTokenDate(): ?string
+    public function getRegistrationTokenDate(): ?\DateTimeInterface
     {
         return $this->registrationTokenDate;
     }
@@ -270,7 +270,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getCguDate(): ?string
+    public function getCguDate(): ?\DateTimeInterface
     {
         return $this->cguDate;
     }
