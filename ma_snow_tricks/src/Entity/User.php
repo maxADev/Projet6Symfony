@@ -341,6 +341,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         $this->registrationToken = null;
     }
 
+    public function removeRegistrationTokenDate(): void
+    {
+        $this->registrationTokenDate = null;
+    }
+
     public function generateResetPasswordToken(): void
     {
         $this->resetPasswordToken = ByteString::fromRandom(60);
@@ -351,6 +356,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         $this->resetPasswordToken = null;
     }
 
+    public function removeResetPasswordTokenDate(): void
+    {
+        $this->resetPasswordTokenDate = null;
+    }
 
     public function hashPassword(): void
     {
