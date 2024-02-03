@@ -15,7 +15,7 @@ class EmailService
     ) {
     }
 
-    public function sendEmail(String $userEmail, String $subject, String $template, $routeName, $valueName, $value): void
+    public function sendEmail(string $userEmail, string $subject, string $template, string $routeName, string $valueName, string $value): void
     {
 
         $url = $this->router->generate($routeName, [

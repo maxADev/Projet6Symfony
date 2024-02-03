@@ -13,7 +13,7 @@ class ChangePasswordRequestService
     ) {
     }
 
-    public function requestChangePassword($email): void
+    public function requestChangePassword(string $email): void
     {
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email, 'statut' => 1]);
 
