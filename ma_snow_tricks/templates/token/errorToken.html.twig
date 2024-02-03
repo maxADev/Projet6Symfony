@@ -1,0 +1,9 @@
+{% extends "layout.html.twig" %}
+{% block content %}
+    <div class="container-fluid col-5">
+        <div class="col-5 m-auto bg-danger text-white mt-3 p-3 rounded">
+            Le token n'est plus valide
+        </div>
+        <a href={{"/regenerate-token/#{token}"}}>Obtenir un nouveau token</a>
+    </div>
+{% endblock %}

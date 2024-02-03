@@ -20,28 +20,19 @@ use Symfony\Component\Validator\Constraints\Image;
 use App\Service\EmailService;
 use App\Service\RegistrationService;
 use App\Service\ConfirmUserService;
-use App\Service\TokenService;
+use App\Service\CheckTokenService;
 use App\Service\ChangePasswordService;
+use App\Service\ChangePasswordRequestService;
+use App\Service\RegenerateTokenService;
 
 class UserController extends AbstractController
 {
-    public function __construct(
-        private RegistrationService $registrationService,
-        private ConfirmUserService $confirmUserService,
-        private EmailService $emailService,
-        private TokenService $tokenService,
-        private ChangePasswordService $changePasswordService,
-    ) {
-    }
-
     #[Route('/registration')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, RegistrationService $registrationService): Response
     {
-        // Check if user is logged Start
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('account');
         }
-        // Check if user is logged End
 
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
@@ -49,17 +40,13 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $this->registrationService->userRegister($user);
-            $entityManager->persist($user);
-            $entityManager->flush($user);
+            $registrationService->userRegister($user);
 
             $this->addFlash(
                 'success',
                 'Un email vous a été envoyé pour valider votre compte',
             );
-            
-            $confirmRegistrationPage = $this->generateUrl('confirm_registration', ['registrationToken' => $user->getRegistrationToken(),]);
-            $this->emailService->sendEmail($user->getEmail(), 'Confirmation d\'inscription', '<h5>Cliquez sur le lien suivant pour valider votre inscription : </h5><a href="'.$confirmRegistrationPage.'">Confirmer</a>');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -69,10 +56,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/confirm-registration/{registrationToken}', name: 'confirm_registration')]
-    public function confirmRegistration(EntityManagerInterface $entityManager, User $user): Response
+    public function confirmRegistration(User $user, ConfirmUserService $confirmUserService, CheckTokenService $checkTokenService): Response
     {
-        $this->confirmUserService->userConfirm($user);
-        $entityManager->flush();
+        if (!$checkTokenService->checkValidationToken($user->getRegistrationTokenDate())) {
+            return $this->redirectToRoute('regenerate_token_request', ['token' => $user->getRegistrationToken()]);
+        }
+
+        $confirmUserService->userConfirm($user);
 
         $this->addFlash(
             'success',
@@ -98,30 +88,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/change-password-request', name: 'change_password_request')]
-    public function changePasswordRequest(Request $request, EntityManagerInterface $entityManager): Response
+    public function changePasswordRequest(Request $request, ChangePasswordRequestService $changePasswordRequestService): Response
     {
         $form = $this->createForm(PasswordRequestType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData();
-            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email, 'statut' => 1]);
-
-            if (!$user) {
-                throw $this->createNotFoundException(
-                    'Ce compte n\'existe pas'
-                );
-            }
-
-            $user->generateResetPasswordToken();
-            $user->setResetPasswordTokenDate();
-            $entityManager->flush();
-
-            $changePasswordUrl = $this->generateUrl('change_password', [
-                'resetPasswordToken' => $user->getResetPasswordToken(),
-            ]);
-
-            $this->emailService->sendEmail($user->getEmail(), 'Changer votre mot de passe', '<h5>Cliquez sur le lien suivant pour changer votre mot de passe : </h5><a href="'.$changePasswordUrl.'">Changer mon mot de passe</a>');
+            $changePasswordRequestService->requestChangePassword($email);
 
             $this->addFlash(
                 'success',
@@ -135,22 +109,17 @@ class UserController extends AbstractController
     }
 
     #[Route('/change-password/{resetPasswordToken}', name: 'change_password')]
-    public function changePassword(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function changePassword(Request $request, User $user, CheckTokenService $checkTokenService, ChangePasswordService $changePasswordService): Response
     {
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
 
-        if (!$this->tokenService->checkValidationToken($user->getResetPasswordTokenDate())) {
-            $this->addFlash(
-                'danger',
-                'Le token à expiré, veuillez recommencer',
-            );
-            return $this->redirectToRoute('change_password_request');
+        if (!$checkTokenService->checkValidationToken($user->getResetPasswordTokenDate())) {
+            return $this->redirectToRoute('regenerate_token_request', ['token' => $user->getResetPasswordToken()]);
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->changePasswordService->changePassword($user);
-            $entityManager->flush();
+            $changePasswordService->changePassword($user);
 
             $this->addFlash(
                 'success',
@@ -163,5 +132,22 @@ class UserController extends AbstractController
         return $this->render('user/changePassword.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/regenerate-token-request/{token}', name: 'regenerate_token_request')]
+    public function regenerateTokenRequest(string $token): Response
+    {
+       return $this->render('token/errorToken.html.twig', ['token' => $token]);
+    }
+
+    #[Route('/regenerate-token/{token}', name: 'regenerate_token')]
+    public function regenerateToken(RegenerateTokenService $regenerateTokenService, string $token): Response
+    {
+        $regenerateTokenService->regenerateToken($token);
+        $this->addFlash(
+            'success',
+            'Un nouveau token vous a été envoyé par email',
+        );
+        return $this->redirectToRoute('app_login');
     }
 }
