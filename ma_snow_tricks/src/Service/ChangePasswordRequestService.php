@@ -10,6 +10,7 @@ class ChangePasswordRequestService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private EmailService $emailService,
+        private FlashMessageService $flashMessageService,
     ) {
     }
 
@@ -28,5 +29,6 @@ class ChangePasswordRequestService
         $routeName = 'change_password';
         $valueName = 'resetPasswordToken';
         $this->emailService->sendEmail($user->getEmail(), 'Changer votre mot de passe', 'changePassword.html.twig', $routeName, $valueName, $user->getResetPasswordToken());
+        $this->flashMessageService->createFlashMessage('success', 'Un email vous a été envoyé pour changer votre mot de passe');
     }
 }

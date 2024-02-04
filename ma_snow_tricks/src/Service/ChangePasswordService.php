@@ -9,6 +9,7 @@ class ChangePasswordService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private FlashMessageService $flashMessageService,
     ) {
     }
 
@@ -18,5 +19,6 @@ class ChangePasswordService
         $user->removeResetPasswordToken();
         $user->removeResetPasswordTokenDate();
         $this->entityManager->flush();
+        $this->flashMessageService->createFlashMessage('success', 'Votre mot de passe a bien été changé');
     }
 }

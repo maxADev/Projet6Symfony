@@ -10,6 +10,7 @@ class RegistrationService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private EmailRegistrationService $emailRegistrationService,
+        private FlashMessageService $flashMessageService,
     ) {
     }
 
@@ -24,5 +25,6 @@ class RegistrationService
         $this->entityManager->flush();
 
         $this->emailRegistrationService->sendEmailRegistration($user->getEmail(), $user->getRegistrationToken());
+        $this->flashMessageService->createFlashMessage('success', 'Un email vous a été envoyé pour valider votre compte');
     }
 }

@@ -9,16 +9,17 @@ class ConfirmUserService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private CheckTokenService $checkTokenService
+        private CheckTokenService $checkTokenService,
+        private FlashMessageService $flashMessageService,
     ) {
     }
 
     public function userConfirm(User $user): void
     {
-
         $user->removeRegistrationToken();
         $user->removeRegistrationTokenDate();
         $user->setStatut(1);
         $this->entityManager->flush();
+        $this->flashMessageService->createFlashMessage('success', 'Votre compte a bien été validé');
     }
 }
