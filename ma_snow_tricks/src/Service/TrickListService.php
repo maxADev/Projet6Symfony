@@ -12,7 +12,7 @@ class TrickListService
     ) {
     }
 
-    public function getTrickList($nbTrick): Array
+    public function getTrickList(string $nbTrick): Array
     {
         $newTricklList = [];
         $getNbTrick = 5;
