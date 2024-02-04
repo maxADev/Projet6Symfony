@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +16,6 @@ use App\Form\Type\ChangePasswordType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Image;
-use App\Service\EmailService;
 use App\Service\RegistrationService;
 use App\Service\ConfirmUserService;
 use App\Service\CheckTokenService;
@@ -42,11 +40,6 @@ class UserController extends AbstractController
             $user = $form->getData();
             $registrationService->userRegister($user);
 
-            $this->addFlash(
-                'success',
-                'Un email vous a été envoyé pour valider votre compte',
-            );
-
             return $this->redirectToRoute('app_login');
         }
 
@@ -64,19 +57,13 @@ class UserController extends AbstractController
 
         $confirmUserService->userConfirm($user);
 
-        $this->addFlash(
-            'success',
-            'Votre compte a bien été validé',
-        );
-
         return $this->redirectToRoute('app_login');
     }
 
     #[Route('/account', name: 'account')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function userAccount(): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $this->addFlash(
             'success',
             'Vous êtes bien connecté',
@@ -95,12 +82,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData();
-            $changePasswordRequestService->requestChangePassword($email);
-
-            $this->addFlash(
-                'success',
-                'Un email vous a été envoyé pour changer votre mot de passe',
-            );
+            $changePasswordRequestService->requestChangePassword($email['email']);
         }
         
         return $this->render('user/changePasswordRequest.html.twig', [
@@ -121,11 +103,6 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $changePasswordService->changePassword($user);
 
-            $this->addFlash(
-                'success',
-                'Votre mot de passe a bien été changé',
-            );
-
             return $this->redirectToRoute('app_login');
         }
 
@@ -144,10 +121,6 @@ class UserController extends AbstractController
     public function regenerateToken(RegenerateTokenService $regenerateTokenService, string $token): Response
     {
         $regenerateTokenService->regenerateToken($token);
-        $this->addFlash(
-            'success',
-            'Un nouveau token vous a été envoyé par email',
-        );
         return $this->redirectToRoute('app_login');
     }
 }
