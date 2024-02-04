@@ -46,7 +46,7 @@ final class CommentFactory extends ModelFactory
     {
         return [
             'content' => self::faker()->text(250),
-            'creation_date' => self::faker()->dateTime(),
+            'creationDate' => self::faker()->dateTime(),
             'trick' => null, // add App\Entity\Trick type manually
             'user' => null, // add App\Entity\User type manually
         ];

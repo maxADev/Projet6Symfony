@@ -16,43 +16,43 @@ class TrickVideoFixtures extends Fixture implements DependentFixtureInterface
     {
         $videoList = [
                         [
-                        'link' => 'https://www.youtube.com/watch?v=jm19nEvmZgM',
+                        'link' => 'https://www.youtube.com/embed/jm19nEvmZgM',
                         'trick_slug' => 'mute',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=M-W7Pmo-YMY',
+                        'link' => 'https://www.youtube.com/embed/M-W7Pmo-YMY',
                         'trick_slug' => 'nose-grab',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=Vz0qu5AfDTg',
+                        'link' => 'https://www.youtube.com/embed/Vz0qu5AfDTg',
                         'trick_slug' => 'truck-driver',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=Vz0qu5AfDTg',
+                        'link' => 'https://www.youtube.com/embed/Vz0qu5AfDTg',
                         'trick_slug' => '1080-ou-big-foot',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=QF2rtZBsjIo',
+                        'link' => 'https://www.youtube.com/embed/QF2rtZBsjIo',
                         'trick_slug' => 'hakon-flip',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=P5ZI-d-eHsI',
+                        'link' => 'https://www.youtube.com/embed/P5ZI-d-eHsI',
                         'trick_slug' => 'corkscrew-ou-cork',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=nom7QBoGh5w',
+                        'link' => 'https://www.youtube.com/embed/nom7QBoGh5w',
                         'trick_slug' => 'rocket-air',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=KEdFwJ4SWq4',
+                        'link' => 'https://www.youtube.com/embed/KEdFwJ4SWq4',
                         'trick_slug' => 'melancholie',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=id8VKl9RVQw',
+                        'link' => 'https://www.youtube.com/embed/id8VKl9RVQw',
                         'trick_slug' => 'tail-grab',
                         ],
                         [
-                        'link' => 'https://www.youtube.com/watch?v=jH76540wSqU',
+                        'link' => 'https://www.youtube.com/embed/jH76540wSqU',
                         'trick_slug' => 'japan',
                         ],
                     ];

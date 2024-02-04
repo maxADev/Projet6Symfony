@@ -6,11 +6,26 @@ use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Model\DateTrait;
+use App\Util\DateInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-class Comment
+class Comment implements DateInterface
 {
     use DateTrait;
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('content', new NotBlank());
+        $metadata->addPropertyConstraint('content', new NotBlank());
+        $metadata->addPropertyConstraint('content', new Length([
+            'max' => 250,
+            'maxMessage' => 'Le commentaire ne peut faire que 250 caractères maximum',
+        ]));
+    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,7 +36,7 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creation_date = null;
+    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -57,12 +72,24 @@ class Comment
 
     public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->creation_date;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(): static
+    public function setCreationDate(\DateTimeInterface $creationDate): static
     {
-        $this->creation_date = $this->createDateTime();
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getModificationDate(): ?\DateTimeInterface
+    {
+        return $this->modificationDate;
+    }
+
+    public function setModificationDate(\DateTimeInterface $modificationDate): static
+    {
+        $this->modificationDate = $modificationDate;
 
         return $this;
     }

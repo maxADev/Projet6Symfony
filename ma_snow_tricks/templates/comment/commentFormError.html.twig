@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid col-8">
+        <h5 class="text-center text-danger mt-3">Erreur dans le formulaire</h5>
+        <div class="well">
+            {{ include('comment/commentForm.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

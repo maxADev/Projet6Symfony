@@ -22,6 +22,7 @@ use App\Service\CheckTokenService;
 use App\Service\ChangePasswordService;
 use App\Service\ChangePasswordRequestService;
 use App\Service\RegenerateTokenService;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends AbstractController
 {
@@ -64,11 +65,6 @@ class UserController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function userAccount(): Response
     {
-        $this->addFlash(
-            'success',
-            'Vous êtes bien connecté',
-        );
-
         $user = $this->getUser();
 
         return $this->render('user/account.html.twig');

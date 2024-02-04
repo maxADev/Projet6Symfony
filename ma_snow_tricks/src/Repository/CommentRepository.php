@@ -30,7 +30,7 @@ class CommentRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('c')
             ->andWhere('c.trick = :trick')
             ->setParameter('trick', $trick)
-            ->orderBy('c.creation_date', 'DESC')
+            ->orderBy('c.creationDate', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)
             ->getQuery()
