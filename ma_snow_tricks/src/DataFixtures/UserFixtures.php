@@ -20,6 +20,7 @@ class UserFixtures extends Fixture
             $user->setCreationDate($date);
             $user->setRegistrationToken($this->randomToken(15));
             $user->setStatut(0);
+            $user->setCguDate($date);
             $manager->persist($user);
             $this->addReference('User'.'_'.$i, $user);
         }

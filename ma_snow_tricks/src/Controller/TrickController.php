@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CommentRepository;
+use App\Service\TrickListService;
 
 class TrickController extends AbstractController
 {
@@ -21,40 +22,12 @@ class TrickController extends AbstractController
     }
 
     #[Route('/show')]
-    public function show(EntityManagerInterface $entityManager, Request $request): Response
+    public function show(Request $request, TrickListService $trickListService): Response
     {
-        $newTricklList = [];
-        $getNbTrick = 5;
-
         $nbTrick = $request->request->get('nbTrick');
-        if($nbTrick == 0)
-        {
-            $getNbTrick = 10;
-        }
+        $trickListValue = $trickListService->getTrickList($nbTrick);
 
-        $repository = $entityManager->getRepository(Trick::class);
-        $trickList = $repository->findBy([], ['id'=>'DESC'], $getNbTrick, $nbTrick);
-
-        foreach ($trickList as $trick) {
-            $newTricklList[$trick->getId()]['name'] = $trick->getName();
-            $newTricklList[$trick->getId()]['slug'] = $trick->getSlug();
-            $listTrickImages = $trick->getTrickImages();
-            foreach ($listTrickImages as $trickImages) {
-                if (empty($newTricklList[$trick->getId()]['image']))
-                {
-                    $newTricklList[$trick->getId()]['image'] = $trickImages->getName();
-                }
-            }
-        }
-
-        if($nbTrick == 0)
-        {
-            $nbTrick = 5;
-        }
-
-        $newNbTrick = $nbTrick + 5;
-
-        return new JsonResponse(['listTrick' => $newTricklList, 'nbTrick' => $newNbTrick]);
+        return new JsonResponse(['listTrick' => $trickListValue['listTrick'], 'nbTrick' => $trickListValue['nbTrick']]);
     }
 
     #[Route('/trick/{slug}', name: 'trick')]

@@ -179,9 +179,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->creationDate;
     }
 
-    public function setCreationDate(): static
+    public function setCreationDate(\DateTimeInterface $creationDate): static
     {
-        $this->creationDate = $this->createDateTime();
+        $this->creationDate = $creationDate;
 
         return $this;
     }
@@ -191,9 +191,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->modificationDate;
     }
 
-    public function setModificationDate(): static
+    public function setModificationDate(\DateTimeInterface $modificationDate): static
     {
-        $this->modificationDate = $this->createDateTime();
+        $this->modificationDate = $modificationDate;
 
         return $this;
     }

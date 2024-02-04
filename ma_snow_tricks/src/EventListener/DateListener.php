@@ -20,7 +20,7 @@ class DateListener
             return;
         }
 
-        $entity->setCreationDate();
+        $entity->setCreationDate($entity->createDateTime());
     }
 
     public function preUpdate(PreUpdateEventArgs $args): void
@@ -31,6 +31,6 @@ class DateListener
             return;
         }
 
-        $entity->setModificationDate();
+        $entity->setModificationDate($entity->createDateTime());
     }
 }

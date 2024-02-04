@@ -34,6 +34,9 @@
                 <span>{{trick.description}}</span>
             </div>
             <div class="col-8 m-auto border-top border-dark mt-3 mb-3"></div>
+            {% if app.user %}
+               {{ render(controller('App\\Controller\\CommentController::commentForm', {'slug': trick.slug})) }}
+            {% endif %}
             {% include 'comment/comment.html.twig' %}
         </div>
     </div>
