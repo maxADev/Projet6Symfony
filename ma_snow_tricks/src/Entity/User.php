@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\ByteString;
@@ -18,6 +19,8 @@ use App\Util\DateInterface;
 use App\Model\DateTrait;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity('name')]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInterface
 {
     use DateTrait;
@@ -28,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Vous devez renseigner un nom')]
     #[Assert\Length(
         min: 3,
         max: 50,
@@ -38,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     private ?string $name = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Vous devez renseigner une adresse email')]
     #[Assert\Length(
         max: 50,
         maxMessage: 'L\'adresse email doit faire 50 caractères maximum',
@@ -49,17 +52,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     private ?string $email = null;
 
     #[ORM\Column(length: 60)]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 5,
-        max: 15,
-        minMessage: 'Le mot de passe doit faire 5 caractères minimum',
-        maxMessage: 'Le mot de passe doit faire 15 caractères maximum',
-    )]
     private ?string $password = null;
 
-    #[Assert\EqualTo(propertyPath: 'password', message: 'Les mots de passes sont différents')]
-    #[Assert\NotBlank]
     private ?string $confirmPassword = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -86,8 +80,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     #[ORM\Column]
     private ?bool $statut = null;
 
-    #[Assert\NotBlank]
-    private $cgu = null;
+    #[ORM\Column]
+    private ?bool $cgu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     private ?\DateTimeInterface $cguDate = null;
@@ -111,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -123,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -351,11 +345,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     public function removeResetPasswordTokenDate(): void
     {
         $this->resetPasswordTokenDate = null;
-    }
-
-    public function hashPassword(): void
-    {
-        $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
-        $this->password = $hashedPassword;
     }
 }

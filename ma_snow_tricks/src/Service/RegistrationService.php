@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationService
 {
@@ -11,6 +12,8 @@ class RegistrationService
         private EntityManagerInterface $entityManager,
         private EmailRegistrationService $emailRegistrationService,
         private FlashMessageService $flashMessageService,
+        private UserPasswordHasherInterface $passwordHasher,
+        
     ) {
     }
 
@@ -20,7 +23,11 @@ class RegistrationService
         $user->setRegistrationTokenDate();
         $user->setStatut(0);
         $user->setCguDate();
-        $user->hashPassword();
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $user,
+            $user->getPassword(),
+        );
+        $user->setPassword($hashedPassword);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

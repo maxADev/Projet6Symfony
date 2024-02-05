@@ -1,4 +1,18 @@
 {% extends "layout.html.twig" %}
 {% block content %}
-    <p>Mon compte</p>
+    <div class="container-fluid">
+        <h3 class="text-center mt-3">Mon compte {{user.name}}</h3>
+        {% if user.image|length > 0 %}
+            <div class="container-fluid col-2">
+                <img class="user-image" src="{{asset('upload/'~ user.image)}}" alt="Card image cap">
+            </div>
+        {% else %}
+            <div class="container-fluid col-2">
+                <img class="user-image" src="{{asset('assets/images/user-no-image.jpg')}}" alt="Card image cap">
+            </div>
+        {% endif %}
+        <div class="container-fluid col-12 text-center">
+            <a href="{{ path('update_user') }}">Modifier mes informations</a>
+        </div>
+    </div>
 {% endblock %}
