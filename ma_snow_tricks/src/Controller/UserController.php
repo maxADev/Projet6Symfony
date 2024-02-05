@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Form\Type\UserType;
+use App\Form\Type\UpdateUserType;
 use App\Form\Type\PasswordRequestType;
 use App\Form\Type\ChangePasswordType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,7 +23,11 @@ use App\Service\CheckTokenService;
 use App\Service\ChangePasswordService;
 use App\Service\ChangePasswordRequestService;
 use App\Service\RegenerateTokenService;
+use App\Service\UpdateUserService;
+use App\Service\FileUploaderService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+
 
 class UserController extends AbstractController
 {
@@ -67,7 +72,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
-        return $this->render('user/account.html.twig');
+        return $this->render('user/account.html.twig', ['user' => $user]);
     }
 
     #[Route('/change-password-request', name: 'change_password_request')]
@@ -98,11 +103,31 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $changePasswordService->changePassword($user);
-
             return $this->redirectToRoute('app_login');
         }
 
         return $this->render('user/changePassword.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/update-user', name: 'update_user')]
+    public function updateUser(#[CurrentUser] User $user, Request $request, UpdateUserService $updateUserService, FileUploaderService $fileUploaderService): Response
+    {
+        $form = $this->createForm(UpdateUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData();
+            if (!is_null($image)) {
+                $imageName = $fileUploaderService->upload($image);
+                $user->setImage($imageName);
+            }
+            $updateUserService->updateUser($user);
+            return $this->redirectToRoute('account');
+        }
+
+        return $this->render('user/userUpdate.html.twig', [
             'form' => $form,
         ]);
     }
