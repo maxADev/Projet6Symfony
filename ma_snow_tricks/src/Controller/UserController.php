@@ -112,7 +112,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/update-user', name: 'update_user')]
-    public function updateUser(#[CurrentUser] User $user, Request $request, UpdateUserService $updateUserService, FileUploaderService $fileUploaderService)
+    public function updateUser(#[CurrentUser] User $user, Request $request, UpdateUserService $updateUserService, FileUploaderService $fileUploaderService): Response
     {
         $form = $this->createForm(UpdateUserType::class, $user);
         $form->handleRequest($request);
