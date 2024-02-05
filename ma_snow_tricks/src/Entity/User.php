@@ -5,13 +5,12 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,52 +22,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
 {
     use DateTrait;
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
-    {
-        $metadata->addPropertyConstraint('name', new NotBlank());
-        $metadata->addPropertyConstraint('email', new NotBlank());
-        $metadata->addPropertyConstraint('password', new NotBlank());
-        $metadata->addPropertyConstraint('confirmPassword', new NotBlank());
-
-        $metadata->addConstraint(new UniqueEntity([
-            'fields' => 'name',
-        ]));
-
-        $metadata->addConstraint(new UniqueEntity([
-            'fields' => 'email',
-        ]));
-
-        $metadata->addPropertyConstraint('confirmPassword', new EqualTo([
-            'propertyPath' => 'password',
-            'message' => 'Les mots de passes sont différents',
-        ]));
-
-        $metadata->addPropertyConstraint('email',  new Email([
-            'message' => 'Le format de l\'email n\'est pas valide',
-        ]));
-
-        $metadata->addPropertyConstraint('password', new Length([
-            'min' => 5,
-            'max' => 60,
-            'minMessage' => 'Le mot de passe doit faire 5 caractères minimum',
-            'maxMessage' => 'Le mot de passe peut faire 60 caractères maximum',
-        ]));
-    }
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom d\'utilisateur doit faire 3 caractères minimum',
+        maxMessage: 'Le nom d\'utilisateur doit faire 50 caractères maximum',
+    )]
     private ?string $name = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'L\'adresse email doit faire 50 caractères maximum',
+    )]
+    #[Assert\Email(
+        message: 'Le format de l\'adresse email n\'est pas valide',
+    )]
     private ?string $email = null;
 
     #[ORM\Column(length: 60)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 5,
+        max: 15,
+        minMessage: 'Le mot de passe doit faire 5 caractères minimum',
+        maxMessage: 'Le mot de passe doit faire 15 caractères maximum',
+    )]
     private ?string $password = null;
 
+    #[Assert\EqualTo(propertyPath: 'password', message: 'Les mots de passes sont différents')]
+    #[Assert\NotBlank]
     private ?string $confirmPassword = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -95,6 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     #[ORM\Column]
     private ?bool $statut = null;
 
+    #[Assert\NotBlank]
     private $cgu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
