@@ -10,8 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\CommentRepository;
-use App\Service\TrickListService;
+use App\Service\LoadTrickService;
 
 class TrickController extends AbstractController
 {
@@ -22,25 +21,19 @@ class TrickController extends AbstractController
     }
 
     #[Route('/show')]
-    public function show(Request $request, TrickListService $trickListService): Response
+    public function show(Request $request, LoadTrickService $loadTrickService): Response
     {
-        $nbTrick = $request->request->get('nbTrick');
-        $trickListValue = $trickListService->getTrickList($nbTrick);
+        $nbTrick = intval($request->request->get('nbTrick'));
+        $trickListValue = $loadTrickService->getTrickList($nbTrick);
 
         return new JsonResponse(['listTrick' => $trickListValue['listTrick'], 'nbTrick' => $trickListValue['nbTrick']]);
     }
 
     #[Route('/trick/{slug}', name: 'trick')]
-    public function showTrick(Request $request, Trick $trick, CommentRepository $commentRepository): Response
+    public function showTrick(Trick $trick): Response
     {
-        $offset = max(0, $request->query->getInt('offset', 0));
-        $paginator = $commentRepository->getCommentPaginator($trick, $offset);
-
         return $this->render('trick/trickPage.html.twig', [
             'trick' => $trick,
-            'comments' => $paginator,
-            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
-            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 }

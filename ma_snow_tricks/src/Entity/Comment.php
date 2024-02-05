@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Model\DateTrait;
 use App\Util\DateInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
@@ -17,22 +16,19 @@ class Comment implements DateInterface
 {
     use DateTrait;
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
-    {
-        $metadata->addPropertyConstraint('content', new NotBlank());
-        $metadata->addPropertyConstraint('content', new NotBlank());
-        $metadata->addPropertyConstraint('content', new Length([
-            'max' => 250,
-            'maxMessage' => 'Le commentaire ne peut faire que 250 caractères maximum',
-        ]));
-    }
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 250,
+        minMessage: 'Le commentaire doit faire que 3 caractères minimum',
+        maxMessage: 'Le commentaire ne peut faire que 250 caractères maximum',
+    )]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

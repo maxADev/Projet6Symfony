@@ -119,4 +119,10 @@ class UserController extends AbstractController
         $regenerateTokenService->regenerateToken($token);
         return $this->redirectToRoute('app_login');
     }
+
+    #[Route('/cgu', name: 'cgu')]
+    public function cguPage(): Response
+    {
+        return $this->render('cgu/cgu.html.twig');
+    }
 }

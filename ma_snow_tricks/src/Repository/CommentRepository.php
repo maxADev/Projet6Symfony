@@ -25,17 +25,16 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function getCommentPaginator(Trick $trick, int $offset): Paginator
+    public function getCommentPaginator(Trick $trick, int $offset): array
     {
-        $query = $this->createQueryBuilder('c')
+        return $this->createQueryBuilder('c')
             ->andWhere('c.trick = :trick')
             ->setParameter('trick', $trick)
             ->orderBy('c.creationDate', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)
             ->getQuery()
+            ->getResult()
         ;
-
-        return new Paginator($query);
     }
 }

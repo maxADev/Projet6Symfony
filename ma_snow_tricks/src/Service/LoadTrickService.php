@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Trick;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TrickListService
+class LoadTrickService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -15,12 +15,7 @@ class TrickListService
     public function getTrickList(string $nbTrick): Array
     {
         $newTricklList = [];
-        $getNbTrick = 5;
-
-        if($nbTrick == 0)
-        {
-            $getNbTrick = 10;
-        }
+        $getNbTrick = 10;
 
         $repository = $this->entityManager->getRepository(Trick::class);
         $trickList = $repository->findBy([], ['id'=>'DESC'], $getNbTrick, $nbTrick);
@@ -37,12 +32,7 @@ class TrickListService
             }
         }
 
-        if($nbTrick == 0)
-        {
-            $nbTrick = 5;
-        }
-
-        $newNbTrick = $nbTrick + 5;
+        $newNbTrick = $nbTrick + 10;
 
         $trickList = ['listTrick' => $newTricklList, 'nbTrick' => $newNbTrick];
 
