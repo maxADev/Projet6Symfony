@@ -244,7 +244,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getCgu(): ?string
+    public function getCgu(): ?bool
     {
         return $this->cgu;
     }
