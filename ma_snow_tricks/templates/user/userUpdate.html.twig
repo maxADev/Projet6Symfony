@@ -1,7 +1,16 @@
 {% extends "layout.html.twig" %}
+{% block title %}
+Modifier mes informations
+{% endblock %}
 {% block content %}
     <div class="container-fluid col-5">
-        <h5 class="mt-3">Modifier mes informations</h5>
-        <p>{{form(form)}}</p>
+        <h5 class="mt-3 text-center">Modifier mes informations</h5>
+        {% if form.vars.data.image %}
+            <div class="container-fluid col-6 text-center mt-3">
+                <img src="{{asset('upload/'~ form.vars.data.image)}}" height="100">
+                <p>Votre image actuelle</p>
+            </div>
+        {% endif %}
+        {{form(form)}}
     </div>
 {% endblock %}
