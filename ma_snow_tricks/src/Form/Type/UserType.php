@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\EqualTo;
 
 class UserType extends AbstractType
 {
@@ -43,6 +42,7 @@ class UserType extends AbstractType
             ])
             ->add('cgu', CheckboxType::class, [
                 'label' =>  'Accepter les Conditions générales d\'utilisation',
+                'constraints' => [new NotBlank(['message' => 'Le mot de passe ne peut être vide'])],
             ])
             ->add('save', SubmitType::class, ['label' => 'Valider'])
         ;

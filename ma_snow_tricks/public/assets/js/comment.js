@@ -25,7 +25,7 @@ $(document).ready(function() {
                     commentCard += '<div class="container col-12 col-sm-12 col-lg-9 col-xl-9 d-flex justify-content-center flex-wrap align-items-center comment-container mt-3">';
                     commentCard += '<div class="container col-4 col-sm-4 col-lg-4 col-xl-2 m-0">';
                     if (listComment[key].userImage) {
-                        commentCard += '<img class="user-image" src="" alt="Card image cap">';
+                        commentCard += '<img class="user-image" src="/upload/'+listComment[key].userImage+'" alt="Card image cap">';
                     } else {
                         commentCard += '<img class="user-image" src="/assets/images/user-no-image.jpg" alt="Card image cap">';
                     }

@@ -13,7 +13,6 @@ class RegenerateTokenService
         private UserRepository $userRepository,
         private ChangePasswordRequestService $requestChangePasswordService,
         private RegenerateRegistrationTokenService $regenerateRegistrationTokenService,
-        private FlashMessageService $flashMessageService,
     ) {
     }
 
@@ -28,7 +27,6 @@ class RegenerateTokenService
             } else {
                 $this->regenerateRegistrationTokenService->regenerateRegistrationToken($user->getEmail());
             }
-            $this->flashMessageService->createFlashMessage('success', 'Un nouveau token vous a été envoyé par email');
         }
     }
 }

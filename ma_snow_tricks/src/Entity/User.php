@@ -129,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -141,7 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this->confirmPassword;
     }
 
-    public function setConfirmPassword(string $confirmPassword): static
+    public function setConfirmPassword(?string $confirmPassword): static
     {
         $this->confirmPassword = $confirmPassword;
 
