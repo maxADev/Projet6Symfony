@@ -9,7 +9,6 @@ class ConfirmUserService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private CheckTokenService $checkTokenService,
         private FlashMessageService $flashMessageService,
     ) {
     }

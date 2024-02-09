@@ -16,7 +16,6 @@ $(document).ready(function() {
             data: {
                 nbComment : nbComment,
             },
-            dataType: 'json',
             success: function(msg)
             {
                 listComment = msg['listComment'];

@@ -5,17 +5,13 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Model\DateTrait;
-use App\Util\DateInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
-class Comment implements DateInterface
+class Comment
 {
-    use DateTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -74,18 +70,6 @@ class Comment implements DateInterface
     public function setCreationDate(\DateTimeInterface $creationDate): static
     {
         $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function getModificationDate(): ?\DateTimeInterface
-    {
-        return $this->modificationDate;
-    }
-
-    public function setModificationDate(\DateTimeInterface $modificationDate): static
-    {
-        $this->modificationDate = $modificationDate;
 
         return $this;
     }

@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Form\Type\UserType;
+use App\Form\Type\RegisterType;
 use App\Form\Type\UpdateUserType;
 use App\Form\Type\PasswordRequestType;
 use App\Form\Type\ChangePasswordType;
@@ -19,10 +19,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Image;
 use App\Service\RegistrationService;
 use App\Service\ConfirmUserService;
-use App\Service\CheckTokenService;
-use App\Service\ChangePasswordService;
-use App\Service\ChangePasswordRequestService;
-use App\Service\RegenerateTokenService;
+use App\Service\TokenService;
+use App\Service\PasswordService;
 use App\Service\UpdateUserService;
 use App\Service\FileUploaderService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -39,7 +37,7 @@ class UserController extends AbstractController
         }
 
         $user = new User;
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,9 +53,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/confirm-registration/{registrationToken}', name: 'confirm_registration')]
-    public function confirmRegistration(User $user, ConfirmUserService $confirmUserService, CheckTokenService $checkTokenService): Response
+    public function confirmRegistration(User $user, ConfirmUserService $confirmUserService, TokenService $tokenService): Response
     {
-        if (!$checkTokenService->checkValidationToken($user->getRegistrationTokenDate())) {
+        if (!$tokenService->checkValidationToken($user->getRegistrationTokenDate())) {
             return $this->redirectToRoute('regenerate_token_request', ['token' => $user->getRegistrationToken()]);
         }
 
@@ -76,14 +74,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/change-password-request', name: 'change_password_request')]
-    public function changePasswordRequest(Request $request, ChangePasswordRequestService $changePasswordRequestService): Response
+    public function changePasswordRequest(Request $request, PasswordService $passwordService): Response
     {
         $form = $this->createForm(PasswordRequestType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData();
-            $changePasswordRequestService->requestChangePassword($email['email']);
+            $passwordService->requestChangePassword($email['email']);
         }
         
         return $this->render('user/changePasswordRequest.html.twig', [
@@ -92,17 +90,17 @@ class UserController extends AbstractController
     }
 
     #[Route('/change-password/{resetPasswordToken}', name: 'change_password')]
-    public function changePassword(Request $request, User $user, CheckTokenService $checkTokenService, ChangePasswordService $changePasswordService): Response
+    public function changePassword(Request $request, User $user, TokenService $tokenService, PasswordService $passwordService): Response
     {
         $form = $this->createForm(ChangePasswordType::class, $user);
         $form->handleRequest($request);
 
-        if (!$checkTokenService->checkValidationToken($user->getResetPasswordTokenDate())) {
+        if (!$tokenService->checkValidationToken($user->getResetPasswordTokenDate())) {
             return $this->redirectToRoute('regenerate_token_request', ['token' => $user->getResetPasswordToken()]);
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $changePasswordService->changePassword($user);
+            $passwordService->changePassword($user);
             return $this->redirectToRoute('app_login');
         }
 
@@ -139,9 +137,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/regenerate-token/{token}', name: 'regenerate_token')]
-    public function regenerateToken(RegenerateTokenService $regenerateTokenService, string $token): Response
+    public function regenerateToken(TokenService $tokenService, string $token): Response
     {
-        $regenerateTokenService->regenerateToken($token);
+        $tokenService->regenerateToken($token);
         return $this->redirectToRoute('app_login');
     }
 

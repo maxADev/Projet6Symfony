@@ -7,6 +7,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 use App\Util\DateInterface;
+use DateTime;
 
 #[AsDoctrineListener('prePersist'/*, 500, 'default'*/)]
 #[AsDoctrineListener('preUpdate'/*, 500, 'default'*/)]
@@ -20,7 +21,7 @@ class DateListener
             return;
         }
 
-        $entity->setCreationDate($entity->createDateTime());
+        $entity->setCreationDate(new DateTime());
     }
 
     public function preUpdate(PreUpdateEventArgs $args): void
@@ -31,6 +32,6 @@ class DateListener
             return;
         }
 
-        $entity->setModificationDate($entity->createDateTime());
+        $entity->setModificationDate(new DateTime());
     }
 }

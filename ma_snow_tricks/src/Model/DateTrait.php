@@ -2,13 +2,38 @@
 
 namespace App\Model;
 
-use DateTime;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
 trait DateTrait
 {
-    public function createDateTime(): ?\DateTimeInterface
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $creationDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $modificationDate = null;
+
+    public function getCreationDate(): ?\DateTimeInterface
     {
-        $date = new DateTime();
-        return $date;
+        return $this->creationDate;
+    }
+
+    public function setCreationDate($creationDate): static
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getModificationDate(): ?\DateTimeInterface
+    {
+        return $this->modificationDate;
+    }
+
+    public function setModificationDate($modificationDate): static
+    {
+        $this->modificationDate = $modificationDate;
+
+        return $this;
     }
 }

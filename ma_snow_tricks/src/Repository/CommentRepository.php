@@ -25,16 +25,16 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    public function save(Comment $entity, bool $flush = true): void
+    {
+        $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
     public function getCommentPaginator(Trick $trick, int $offset): array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick)
-            ->orderBy('c.creationDate', 'DESC')
-            ->setMaxResults(self::PAGINATOR_PER_PAGE)
-            ->setFirstResult($offset)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findBy(['trick' => $trick], ['creationDate' => 'DESC'], self::PAGINATOR_PER_PAGE, $offset);
     }
 }
