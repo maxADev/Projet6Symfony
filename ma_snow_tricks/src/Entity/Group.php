@@ -24,9 +24,6 @@ class Group implements SlugInterface
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 150)]
-    private ?string $slug = null;
-
     #[ORM\OneToMany(mappedBy: 'trick_group', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $tricks;
 
@@ -55,18 +52,6 @@ class Group implements SlugInterface
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $this->createSlug($slug);
 
         return $this;
     }

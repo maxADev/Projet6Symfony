@@ -15,6 +15,13 @@ class EmailService
     ) {
     }
 
+    public function sendEmailRegistration(string $email, string $token): void
+    {
+        $routeName = 'confirm_registration';
+        $valueName = 'registrationToken';
+        $this->sendEmail($email, 'Confirmation d\'inscription', 'userRegistration.html.twig', $routeName, $valueName, $token);
+    }
+
     public function sendEmail(string $userEmail, string $subject, string $template, string $routeName, string $valueName, string $value): void
     {
 

@@ -10,7 +10,7 @@ class RegistrationService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private EmailRegistrationService $emailRegistrationService,
+        private EmailService $emailService,
         private FlashMessageService $flashMessageService,
         private UserPasswordHasherInterface $passwordHasher,
         
@@ -21,7 +21,6 @@ class RegistrationService
     {
         $user->generateRegistrationToken();
         $user->setRegistrationTokenDate();
-        $user->setStatut(0);
         $user->setCguDate();
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
@@ -31,7 +30,7 @@ class RegistrationService
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->emailRegistrationService->sendEmailRegistration($user->getEmail(), $user->getRegistrationToken());
+        $this->emailService->sendEmailRegistration($user->getEmail(), $user->getRegistrationToken());
         $this->flashMessageService->createFlashMessage('success', 'Un email vous a été envoyé pour valider votre compte');
     }
 }

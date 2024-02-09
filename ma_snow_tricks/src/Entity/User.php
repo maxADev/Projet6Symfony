@@ -17,6 +17,7 @@ use Symfony\Component\String\ByteString;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Util\DateInterface;
 use App\Model\DateTrait;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('name')]
@@ -59,12 +60,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creationDate = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $modificationDate = null;
-
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $registrationToken = null;
 
@@ -78,7 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
     private ?\DateTimeInterface $resetPasswordTokenDate = null;
 
     #[ORM\Column]
-    private ?bool $statut = null;
+    private ?bool $statut = false;
 
     #[ORM\Column]
     private ?bool $cgu = null;
@@ -160,30 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(\DateTimeInterface $creationDate): static
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function getModificationDate(): ?\DateTimeInterface
-    {
-        return $this->modificationDate;
-    }
-
-    public function setModificationDate(\DateTimeInterface $modificationDate): static
-    {
-        $this->modificationDate = $modificationDate;
-
-        return $this;
-    }
-
     public function getRegistrationToken(): ?string
     {
         return $this->registrationToken;
@@ -203,7 +174,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
 
     public function setRegistrationTokenDate(): static
     {
-        $this->registrationTokenDate = $this->createDateTime();
+        $this->registrationTokenDate = new DateTime();
 
         return $this;
     }
@@ -227,7 +198,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
 
     public function setResetPasswordTokenDate(): static
     {
-        $this->resetPasswordTokenDate = $this->createDateTime();
+        $this->resetPasswordTokenDate = new DateTime();
 
         return $this;
     }
@@ -263,7 +234,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, DateInt
 
     public function setCguDate(): static
     {
-        $this->cguDate = $this->createDateTime();
+        $this->cguDate = new DateTime();
 
         return $this;
     }

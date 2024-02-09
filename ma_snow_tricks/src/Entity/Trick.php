@@ -30,9 +30,6 @@ class Trick implements SlugInterface, DateInterface
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 250)]
-    private ?string $slug = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
@@ -95,42 +92,6 @@ class Trick implements SlugInterface, DateInterface
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $this->createSlug($slug);
-
-        return $this;
-    }
-
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(\DateTimeInterface $creationDate): static
-    {
-        $this->creationDate = $this->createDateTime();
-
-        return $this;
-    }
-
-    public function getModificationDate(): ?\DateTimeInterface
-    {
-        return $this->modificationDate;
-    }
-
-    public function setModificationDate(\DateTimeInterface $modificationDate): static
-    {
-        $this->modificationDate = $this->createDateTime();
 
         return $this;
     }
