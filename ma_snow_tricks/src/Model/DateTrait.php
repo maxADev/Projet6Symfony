@@ -18,7 +18,7 @@ trait DateTrait
         return $this->creationDate;
     }
 
-    public function setCreationDate($creationDate): static
+    public function setCreationDate(?\DateTimeInterface $creationDate): static
     {
         $this->creationDate = $creationDate;
 
@@ -30,7 +30,7 @@ trait DateTrait
         return $this->modificationDate;
     }
 
-    public function setModificationDate($modificationDate): static
+    public function setModificationDate(?\DateTimeInterface $modificationDate): static
     {
         $this->modificationDate = $modificationDate;
 
