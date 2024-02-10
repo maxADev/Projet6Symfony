@@ -23,6 +23,11 @@ class TrickImage
     #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
