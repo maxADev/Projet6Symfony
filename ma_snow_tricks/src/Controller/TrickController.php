@@ -49,7 +49,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-           $trickService->createTrick($user, $trick, $form);
+           $imageUpload = $form->get('image')->getData();
+           $videoList = $form->get('trickVideos')->getData();
+           $trick->setUser($user);
+           $trickService->createTrick($trick, $imageUpload, $videoList);
            return $this->redirectToRoute('home');
         }
 

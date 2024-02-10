@@ -6,6 +6,7 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\Length;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Util\SlugInterface;
@@ -13,6 +14,7 @@ use App\Util\DateInterface;
 use App\Model\SlugTrait;
 use App\Model\DateTrait;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -29,6 +31,12 @@ class Trick implements SlugInterface, DateInterface
 
     #[ORM\Column(length: 150)]
     #[Assert\NotBlank(message: 'Vous devez renseigner un titre')]
+    #[Assert\Length(
+        min: 3,
+        max: 150,
+        minMessage: 'Le titre doit faire 3 caractères minimum',
+        maxMessage: 'Le titre doit faire 150 caractères maximum',
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]

@@ -24,7 +24,7 @@ class Group implements SlugInterface
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick_group', targetEntity: Trick::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trickGroup', targetEntity: Trick::class, orphanRemoval: true)]
     private Collection $tricks;
 
     public function __construct()

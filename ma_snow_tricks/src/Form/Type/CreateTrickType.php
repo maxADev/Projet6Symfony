@@ -37,7 +37,6 @@ class CreateTrickType extends AbstractType
             ])
             ->add('description', TextType::class, [
                 'label' =>  'Description',
-                'constraints' => [new NotBlank(['message' => 'La description ne peut être vide'])],
             ])
             ->add('image', FileType::class, [
                 'mapped' => false,

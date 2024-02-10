@@ -17,7 +17,7 @@ class TrickImage
     private ?string $name = null;
 
     #[ORM\Column(length: 150)]
-    private ?string $path = null;
+    private ?string $path = '/upload';
 
     #[ORM\ManyToOne(inversedBy: 'trickImages')]
     #[ORM\JoinColumn(nullable: false)]

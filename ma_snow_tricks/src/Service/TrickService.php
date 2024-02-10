@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Entity\TrickImage;
 use App\Entity\TrickVideo;
 use App\Repository\TrickRepository;
@@ -43,19 +42,17 @@ class TrickService
         return $trickList;
     }
 
-    public function createTrick($user, $trick, $form): void
+    public function createTrick(Trick $trick, Array $imageUpload, Array $videoUpload): void
     {
-        $imageUpload = $form->get('image')->getData();
         if (!is_null($imageUpload)) {
             foreach($imageUpload as $image) {
                 $imageName = $this->fileUploaderService->upload($image);
                 $trickImage = new TrickImage();
                 $trickImage->setName($imageName);
-                $trickImage->setPath('/upload');
                 $trick->addTrickImages($trickImage);
             }
         }
-        $videoUpload = $form->get('trickVideos')->getData();
+
         if (!is_null($videoUpload)) {
             foreach($videoUpload as $video) {
                 $trickVideo = new TrickVideo();
@@ -63,7 +60,7 @@ class TrickService
                 $trick->addTrickVideos($trickVideo);
             }
         }
-        $trick->setUser($user);
+
         $this->trickRepository->save($trick);
         $this->flashMessageService->createFlashMessage('success', 'Le trick a bien été ajouté');
     }
