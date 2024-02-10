@@ -1,0 +1,30 @@
+{% extends "layout.html.twig" %}
+{% block title %}
+Poster un trick
+{% endblock %}
+{% block content %}
+    <div class="container-fluid col-5">
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.trickGroup) }}
+        {{ form_row(form.image) }}
+        <div class="trick-video"
+                data-index="{{ form.trickVideos|length > 0 ? form.trickVideos|last.vars.name + 1 : 0 }}"
+                data-prototype="{{ form_widget(form.trickVideos.vars.prototype)|e('html_attr') }}"
+            >
+        </div>
+        {% for emailField in form.trickVideos %}
+            <div>
+                {{ form_errors(emailField) }}
+                {{ form_widget(emailField) }}
+                <button type="button" class="btn btn-primary remove-video">Supprimer</button>
+            </div>
+        {% endfor %}
+        <button type="button" class="btn btn-primary add-video mt-3 mb-5" data-collection-holder-class="trick-video">Ajouter une vidéo</button>
+    {{ form_end(form) }}
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{{ asset('assets/js/createTrick.js') }}"></script>
+{% endblock %}

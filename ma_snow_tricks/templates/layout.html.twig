@@ -13,8 +13,8 @@
         <div class="container-fluid menu-container d-flex justify-content-end bg-dark">
             <ul class="menu m-0 p-3">
                 <li class="p-3"><a href="/">Accueil</a></li>
-                <li class="p-3"><a href="/trick">Tricks</a></li>
                 {% if app.user %}
+                    <li class="p-3"><a href="/create-trick">Poster un trick</a></li>
                     <li class="p-3"><a href="{{ path('account') }}">Mon Compte</a></li>
                     <li class="p-3"><a href="{{ path('app_logout') }}">Deconnexion</a></li>
                 {% else %}

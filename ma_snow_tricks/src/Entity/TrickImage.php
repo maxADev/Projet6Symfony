@@ -17,11 +17,16 @@ class TrickImage
     private ?string $name = null;
 
     #[ORM\Column(length: 150)]
-    private ?string $path = null;
+    private ?string $path = '/upload';
 
     #[ORM\ManyToOne(inversedBy: 'trickImages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Trick $trick = null;
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 
     public function getId(): ?int
     {

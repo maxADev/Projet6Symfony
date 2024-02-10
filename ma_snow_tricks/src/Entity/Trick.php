@@ -5,15 +5,20 @@ namespace App\Entity;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints\Length;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Util\SlugInterface;
 use App\Util\DateInterface;
 use App\Model\SlugTrait;
 use App\Model\DateTrait;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity('name')]
 class Trick implements SlugInterface, DateInterface
 {
     use SlugTrait;
@@ -25,9 +30,17 @@ class Trick implements SlugInterface, DateInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Assert\NotBlank(message: 'Vous devez renseigner un titre')]
+    #[Assert\Length(
+        min: 3,
+        max: 150,
+        minMessage: 'Le titre doit faire 3 caractères minimum',
+        maxMessage: 'Le titre doit faire 150 caractères maximum',
+    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Vous devez renseigner une description')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -40,10 +53,10 @@ class Trick implements SlugInterface, DateInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickImage::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickImage::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $trickImages;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickVideo::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: TrickVideo::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $trickVideos;
 
     #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
@@ -51,7 +64,7 @@ class Trick implements SlugInterface, DateInterface
 
     #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Group $trick_group = null;
+    private ?Group $trickGroup = null;
 
     public function __construct()
     {
@@ -146,7 +159,7 @@ class Trick implements SlugInterface, DateInterface
         return $this->trickVideos;
     }
 
-    public function addTrickVideo(TrickVideo $trickVideo): static
+    public function addTrickVideos(TrickVideo $trickVideo): static
     {
         if (!$this->trickVideos->contains($trickVideo)) {
             $this->trickVideos->add($trickVideo);
@@ -200,12 +213,12 @@ class Trick implements SlugInterface, DateInterface
 
     public function getTrickGroup(): ?Group
     {
-        return $this->trick_group;
+        return $this->trickGroup;
     }
 
-    public function setTrickGroup(?Group $trick_group): static
+    public function setTrickGroup(?Group $trickGroup): static
     {
-        $this->trick_group = $trick_group;
+        $this->trickGroup = $trickGroup;
 
         return $this;
     }
