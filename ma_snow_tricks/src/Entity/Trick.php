@@ -129,7 +129,7 @@ class Trick implements SlugInterface, DateInterface
         return $this->trickImages;
     }
 
-    public function addTrickImages(TrickImage $trickImage): static
+    public function addTrickImage(TrickImage $trickImage): static
     {
         if (!$this->trickImages->contains($trickImage)) {
             $this->trickImages->add($trickImage);
@@ -139,7 +139,7 @@ class Trick implements SlugInterface, DateInterface
         return $this;
     }
 
-    public function removeTrickImages(TrickImage $trickImage): static
+    public function removeTrickImage(TrickImage $trickImage): static
     {
         if ($this->trickImages->removeElement($trickImage)) {
             // set the owning side to null (unless already changed)
@@ -159,7 +159,7 @@ class Trick implements SlugInterface, DateInterface
         return $this->trickVideos;
     }
 
-    public function addTrickVideos(TrickVideo $trickVideo): static
+    public function addTrickVideo(TrickVideo $trickVideo): static
     {
         if (!$this->trickVideos->contains($trickVideo)) {
             $this->trickVideos->add($trickVideo);

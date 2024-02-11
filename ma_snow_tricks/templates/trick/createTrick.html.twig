@@ -3,7 +3,7 @@
 Poster un trick
 {% endblock %}
 {% block content %}
-    <div class="container-fluid col-5">
+    <div class="container-fluid col-5 mt-3">
     {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.description) }}
@@ -14,10 +14,10 @@ Poster un trick
                 data-prototype="{{ form_widget(form.trickVideos.vars.prototype)|e('html_attr') }}"
             >
         </div>
-        {% for emailField in form.trickVideos %}
+        {% for videoField in form.trickVideos %}
             <div>
-                {{ form_errors(emailField) }}
-                {{ form_widget(emailField) }}
+                {{ form_errors(videoField) }}
+                {{ form_widget(videoField) }}
                 <button type="button" class="btn btn-primary remove-video">Supprimer</button>
             </div>
         {% endfor %}

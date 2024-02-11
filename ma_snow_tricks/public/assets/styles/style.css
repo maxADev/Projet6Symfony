@@ -147,6 +147,11 @@ ul li a:hover {
     transition: 0.3s;
 }
 
+.delete-button-container {
+    transform: translateY(8px);
+    text-align: right;
+}
+
 @media screen and (max-width: 1200px) {
     .home-page-text {
         font-size: 85px;

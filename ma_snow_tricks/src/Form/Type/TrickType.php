@@ -6,6 +6,7 @@ namespace App\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -20,7 +21,7 @@ use App\Repository\GroupRepository;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use App\Form\Type\TrickVideoType;
 
-class CreateTrickType extends AbstractType
+class TrickType extends AbstractType
 {
     private $groupRepository;
 
@@ -35,7 +36,7 @@ class CreateTrickType extends AbstractType
             ->add('name', TextType::class, [
                 'label' =>  'Titre du trick',
             ])
-            ->add('description', TextType::class, [
+            ->add('description', TextareaType::class, [
                 'label' =>  'Description',
             ])
             ->add('image', FileType::class, [
@@ -69,7 +70,7 @@ class CreateTrickType extends AbstractType
                     'attr' => ['class' => 'trick-video-item',],
                     'label' => false,
                 ],
-                'mapped' => false,
+                'by_reference' => false
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => Group::class,

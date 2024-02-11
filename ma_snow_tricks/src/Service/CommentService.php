@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Repository\CommentRepository;
+use DateTime;
 
 class CommentService
 {
@@ -17,6 +18,7 @@ class CommentService
 
     public function createComment(Comment $comment): void
     {
+        $comment->setCreationDate(new DateTime());
         $this->commentRepository->save($comment);
         $this->flashMessageService->createFlashMessage('success', 'Le commentaire a bien été ajouté');
     }
