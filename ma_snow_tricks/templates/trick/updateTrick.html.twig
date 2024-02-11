@@ -14,7 +14,7 @@ Modifier un trick
                 {% for trickImage in trick.trickImages %}
                     <div class="col-12 col-sm-5 col-lg-5 col-xl-5 text-center m-1">
                         <img class="card-img-top trick-card-img" src="{{asset('upload/'~ trickImage.name)}}" alt="Card image cap">
-                        <button type="button" class="btn btn-danger remove-image mt-1" data-image-id="{{trickImage.id}}" data-token="{{ csrf_token('delete' ~ trickImage.id )}}">Supprimer</button>
+                        <button type="button" class="btn btn-danger remove-image mt-1" data-image-id="{{trickImage.id}}" data-token="{{ csrf_token(trickImage.id)}}">Supprimer</button>
                     </div>
                 {% endfor %}
             </div>

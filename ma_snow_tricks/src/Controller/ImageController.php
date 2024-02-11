@@ -17,7 +17,7 @@ class ImageController extends AbstractController
     public function deleteImage(Request $request, TrickImage $trickImage, EntityManagerInterface $entityManager): JsonResponse
     {
         $token = $request->request->get('token');
-        if($this->isCsrfTokenValid('delete'.$trickImage->getId(), $token)){
+        if($this->isCsrfTokenValid($trickImage->getId(), $token)){
             $imageName = $trickImage->getName();
             unlink('upload/'.$imageName);
             $entityManager->remove($trickImage);
