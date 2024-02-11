@@ -2,10 +2,13 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Entity\Trick;
 use App\Entity\TrickImage;
 use App\Entity\TrickVideo;
 use App\Repository\TrickRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TrickService
 {
@@ -13,10 +16,11 @@ class TrickService
         private TrickRepository $trickRepository,
         private FlashMessageService $flashMessageService,
         private FileUploaderService $fileUploaderService,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
-    public function getTrickList(string $nbTrick): Array
+    public function getTrickList(string $nbTrick, ?User $user): Array
     {
         $newTricklList = [];
         $getNbTrick = 10;
@@ -24,6 +28,11 @@ class TrickService
         $trickList = $this->trickRepository->findBy([], ['id'=>'DESC'], $getNbTrick, $nbTrick);
 
         foreach ($trickList as $trick) {
+            if(!is_null($user)) {
+                if ($user->getId() === $trick->getUser()->getId()) {
+                    $newTricklList[$trick->getId()]['modify'] = true;
+                }
+            }
             $newTricklList[$trick->getId()]['name'] = $trick->getName();
             $newTricklList[$trick->getId()]['slug'] = $trick->getSlug();
             $listTrickImages = $trick->getTrickImages();
@@ -42,26 +51,33 @@ class TrickService
         return $trickList;
     }
 
-    public function createTrick(Trick $trick, Array $imageUpload, Array $videoUpload): void
+    public function createTrick(Trick $trick, Array $imageUpload): void
     {
         if (!is_null($imageUpload)) {
             foreach($imageUpload as $image) {
                 $imageName = $this->fileUploaderService->upload($image);
                 $trickImage = new TrickImage();
                 $trickImage->setName($imageName);
-                $trick->addTrickImages($trickImage);
-            }
-        }
-
-        if (!is_null($videoUpload)) {
-            foreach($videoUpload as $video) {
-                $trickVideo = new TrickVideo();
-                $trickVideo->setLink($video->getLink());
-                $trick->addTrickVideos($trickVideo);
+                $trick->addTrickImage($trickImage);
             }
         }
 
         $this->trickRepository->save($trick);
         $this->flashMessageService->createFlashMessage('success', 'Le trick a bien été ajouté');
+    }
+
+    public function updateTrick(Trick $trick, Array $imageUpload): void
+    {
+        if (!is_null($imageUpload)) {
+            foreach($imageUpload as $image) {
+                $imageName = $this->fileUploaderService->upload($image);
+                $trickImage = new TrickImage();
+                $trickImage->setName($imageName);
+                $trick->addTrickImage($trickImage);
+            }
+        }
+
+        $this->trickRepository->save($trick);
+        $this->flashMessageService->createFlashMessage('success', 'Le trick a bien été mis à jour');
     }
 }

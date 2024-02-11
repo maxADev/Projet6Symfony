@@ -66,9 +66,16 @@ $(document).ready(function() {
                         trickImageValue = "/upload/"+trickList[key].image;
                     }
                         trickCard += '<img class="card-img-top home-card-img" src="'+trickImageValue+'" alt="Card image cap"/>';
-                        trickCard += '<div class="card-body">';
+                        trickCard += '<div class="card-body row">';
+                            trickCard += '<div class="col-9">';
                             trickCard += '<h5 class="card-title"><a href="/trick/'+trickList[key].slug+'">'+trickList[key].name+'</a></h5>';
-                        trickCard += '</div>';
+                            trickCard += '</div">';
+                            trickCard += '</div>';
+                            if(trickList[key].modify === true) {
+                                trickCard += '<div class="col-3">';
+                                trickCard += '<div><a href="/modify-trick/'+trickList[key].slug+'"><i class="bi bi-pencil-square"></i></a></div>';
+                                trickCard += '</div">';
+                            }
                     trickCard += '</div>';
 
                     $('#trick-list').append(trickCard);
