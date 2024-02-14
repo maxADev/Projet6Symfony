@@ -13,6 +13,12 @@
                     <img class="card-img-top read-trick-image" src="{{asset('assets/images/trick-no-image.jpg')}}" alt="Card image cap">
                 {% endif %}
                 <h5 class="trick-title">{{trick.name}}</h5>
+                {% if app.user.id ==  trick.user.id %}
+                    <div class="trick-modify-container col-12 row m-0 p-0 justify-content-end">
+                        <div class="col-1 m-0 p-0"><a href="{{ path('modify_trick', {'slug': trick.slug}) }}"><i class="bi bi-pencil-square"></i></a></div>
+                        <div class="col-1 m-0 p-0"><a class="delete-trick text-danger" data-slug-trick={{trick.slug}}><i class="bi bi-trash"></i></a></div>
+                    </div>
+                {% endif %}
             </div>
             <div class="container show-trick-asset-container col-12 mt-3 text-center">
                 <button type="button" class="btn btn-primary m-auto show-trick-asset">Voir les médias</button>

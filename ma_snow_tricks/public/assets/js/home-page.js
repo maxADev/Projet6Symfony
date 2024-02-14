@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
     menu();
+    deleteTrick();
 
     // Load trick
     $(document).on('click', '.load-trick', function() {
@@ -61,20 +62,21 @@ $(document).ready(function() {
                 trickCard = '';
                 $.each(trickList, function (key, val) {
                     trickImageValue = "/assets/images/trick-no-image.jpg";
-                    trickCard += '<div class="card trick-card col-9 col-sm-5 col-lg-2 col-xl-2 m-1 mt-5">';
+                    trickCard += '<div class="card trick-card col-9 col-sm-4 col-lg-3 col-xl-2 m-1 mt-5">';
                     if(trickList[key].image) {
                         trickImageValue = "/upload/"+trickList[key].image;
                     }
                         trickCard += '<img class="card-img-top home-card-img" src="'+trickImageValue+'" alt="Card image cap"/>';
                         trickCard += '<div class="card-body row">';
-                            trickCard += '<div class="col-9">';
+                            trickCard += '<div class="col-8">';
                             trickCard += '<h5 class="card-title"><a href="/trick/'+trickList[key].slug+'">'+trickList[key].name+'</a></h5>';
                             trickCard += '</div">';
                             trickCard += '</div>';
                             if(trickList[key].modify === true) {
-                                trickCard += '<div class="col-3">';
-                                trickCard += '<div><a href="/modify-trick/'+trickList[key].slug+'"><i class="bi bi-pencil-square"></i></a></div>';
-                                trickCard += '</div">';
+                                trickCard += '<div class="col-4 row m-0 p-0">';
+                                trickCard += '<div class="col-6 m-0 p-0"><a href="/modify-trick/'+trickList[key].slug+'"><i class="bi bi-pencil-square"></i></a></div>';
+                                trickCard += '<div class="col-6 m-0 p-0"><a class="delete-trick text-danger" data-slug-trick="'+trickList[key].slug+'"><i class="bi bi-trash"></i></a></div>';
+                                trickCard += '</div>';
                             }
                     trickCard += '</div>';
 
@@ -94,6 +96,18 @@ $(document).ready(function() {
             {
                 console.log(textStatus + jqXHR.responseText);
             }
+        });
+    }
+
+    function deleteTrick() {
+        $(document).on('click', '.delete-trick', function() {
+            $('.modal-container').show();
+            slugTrick = $(this).attr('data-slug-trick');
+            $('.confirm-trick-deletion').attr('href', '/delete-trick/'+slugTrick+'');
+        });
+    
+        $(document).on('click', '.delete-trick-close', function() {
+            $('.modal-container').hide();
         });
     }
 

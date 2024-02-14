@@ -16,7 +16,7 @@ $(document).ready(function() {
                     if(msg.success) {
                         $('.remove-image[data-image-id='+imageId+']').parent().remove();
                     } else {
-                        console.log('non');
+                        console.log('erreur');
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown)
