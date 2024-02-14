@@ -28,20 +28,23 @@ class TrickService
         $trickList = $this->trickRepository->findBy([], ['id'=>'DESC'], $getNbTrick, $nbTrick);
 
         foreach ($trickList as $trick) {
+            $modify = false;
+            $image = null;
             if(!is_null($user)) {
                 if ($user->getId() === $trick->getUser()->getId()) {
-                    $newTricklList[$trick->getId()]['modify'] = true;
+                    $modify = true;
                 }
             }
-            $newTricklList[$trick->getId()]['name'] = $trick->getName();
-            $newTricklList[$trick->getId()]['slug'] = $trick->getSlug();
             $listTrickImages = $trick->getTrickImages();
             foreach ($listTrickImages as $trickImages) {
-                if (empty($newTricklList[$trick->getId()]['image']))
-                {
-                    $newTricklList[$trick->getId()]['image'] = $trickImages->getName();
-                }
+                $image = $trickImages->getName();
+                break;
             }
+            $newTricklList[] = ['name' => $trick->getName(),
+                                'slug' => $trick->getSlug(),
+                                'modify' => $modify,
+                                'image' => $image,
+                               ];
         }
 
         $newNbTrick = $nbTrick + 10;

@@ -29,12 +29,12 @@ class CommentService
         $listComment = $this->commentRepository->getCommentPaginator($trick, $nbComment);
 
         foreach ($listComment as $comment) {
-            $commentId = $comment->getId();
             $creationDate = $comment->getCreationDate();
-            $newCommentlList[$commentId]['content'] = $comment->getContent();
-            $newCommentlList[$commentId]['createDate'] = $creationDate->format('d/m/Y à H:i');
-            $newCommentlList[$commentId]['userName'] = $comment->getUser()->getName();
-            $newCommentlList[$commentId]['userImage'] = $comment->getUser()->getImage();
+            $newCommentlList[] = ['content' => $comment->getContent(),
+                                  'createDate' => $creationDate->format('d/m/Y à H:i'),
+                                  'userName' => $comment->getUser()->getName(),
+                                  'userImage' => $comment->getUser()->getImage(),
+                                ];
         }
 
         $newNbComment = $nbComment + 10;
