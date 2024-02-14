@@ -3,50 +3,61 @@
 Modifier un trick
 {% endblock %}
 {% block content %}
-    <div class="container-fluid col-5 mt-5">
+    <div class="container-fluid col-12 col-sm-8 col-lg-8 col-xl-5 mt-5">
+    <h5>Modifier un trick</h5>
     {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.description) }}
         {{ form_row(form.trickGroup) }}
-        {% if trick.trickImages %}
-            <div class="container col-12 row justify-content-around flex-wrap mt-3">
-                <p>Les images :</p>
-                {% for trickImage in trick.trickImages %}
-                    <div class="col-12 col-sm-5 col-lg-5 col-xl-5 text-center m-1">
-                        <img class="card-img-top trick-card-img" src="{{asset('upload/'~ trickImage.name)}}" alt="Card image cap">
-                        <button type="button" class="btn btn-danger remove-image mt-1" data-image-id="{{trickImage.id}}" data-token="{{ csrf_token(trickImage.id)}}">Supprimer</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {{ form_row(form.image) }}
-        {% if trick.trickVideos %}
-            <div class="container col-12 row justify-content-around flex-wrap mt-3">
-                <p>Les videos :</p>
-                {% for trickVideo in trick.trickVideos %}
-                    <div class="col-12 col-sm-5 col-lg-5 col-xl-5 m-1">
-                        <embed class="card-img-top w-100" type="video/webm" src="{{trickVideo.link}}"/>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% for videoField in form.trickVideos %}
-        <div class="container-fluid col-12 row align-items-center m-0 p-0">
-            <div class="container-fluid col-10 m-0 p-0">
-                {{ form_errors(videoField) }}
-                {{ form_widget(videoField) }}
-            </div>
-            <div class="container-fluid delete-button-container col-2 m-0 p-0">
-                <button type="button" class="btn btn-danger remove-video"><i class="bi bi-x-square"></i></button>
-            </div>
+        <div class="container show-trick-asset-container col-12 mt-3 text-center">
+            <button type="button" class="btn btn-primary m-auto show-trick-asset">Voir les médias</button>
+            <button type="button" class="btn btn-primary m-auto hide-trick-asset">Cacher les médias</button>
         </div>
-        {% endfor %}
-        <div class="trick-video"
-                data-index="{{ form.trickVideos|length > 0 ? form.trickVideos|last.vars.name + 1 : 0 }}"
-                data-prototype="{{ form_widget(form.trickVideos.vars.prototype)|e('html_attr') }}"
-        >
-        </div>
+        <div class="container-fluid col-12 trick-asset-container justify-content-around flex-wrap mt-3">
+            {% if trick.trickImages %}
+                <div class="container col-12 row justify-content-around flex-wrap mt-3">
+                    <p>Image(s) :</p>
+                    {% for trickImage in trick.trickImages %}
+                        <div class="col-12 col-sm-5 col-lg-5 col-xl-5 text-center m-1">
+                            <img class="card-img-top trick-card-img" src="{{asset('upload/'~ trickImage.name)}}" alt="Card image cap">
+                            <button type="button" class="btn btn-danger remove-image mt-1" data-image-id="{{trickImage.id}}" data-token="{{ csrf_token(trickImage.id)}}">Supprimer</button>
+                        </div>
+                    {% endfor %}
+                    {{ form_row(form.image) }}
+                </div>
+            {% endif %}
+                <div class="container-fluid col-12 row align-items-center m-0 p-0">
+                    <p>Video(s) :</p>
+                    {% for videoField in form.trickVideos %}
+                        <div class="container-fluid col-12 row align-items-center m-0 p-0">
+                            <div class="col-12 col-sm-5 col-lg-5 col-xl-5 m-1">
+                                <embed class="card-img-top w-100" type="video/webm" src="{{videoField.vars.value.link}}"/>
+                            </div>
+                            <div class="container-fluid col-10 m-0 p-0">
+                                {{ form_errors(videoField) }}
+                                {{ form_widget(videoField) }}
+                            </div>
+                            <div class="container-fluid delete-button-container col-2 m-0 p-0">
+                                <button type="button" class="btn btn-danger remove-video"><i class="bi bi-x-square"></i></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                <div class="trick-video"
+                        data-index="{{ form.trickVideos|length > 0 ? form.trickVideos|last.vars.name + 1 : 0 }}"
+                        data-prototype="{{ form_widget(form.trickVideos.vars.prototype)|e('html_attr') }}"
+                >
+                </div>
+            </div>
         <button type="button" class="btn btn-primary add-video mt-3 mb-5" data-collection-holder-class="trick-video">Ajouter une vidéo</button>
+        </div>
+        <div class="container-fluid row col-12 justify-content-center mt-5 mb-5">
+             <div class="col-6 col-sm-6 col-lg-4 col-xl-4">
+                <a class="btn btn-danger delete-trick" data-slug-trick={{trick.slug}}>Supprimer le trick</a>
+            </div>
+            <div class="col-6 col-sm-6 col-lg-4 col-xl-4">
+                {{ form_row(form.save, { 'label': 'Modifier le trick' }) }}
+            </div>
+        </div>
     {{ form_end(form) }}
     </div>
 {% endblock %}

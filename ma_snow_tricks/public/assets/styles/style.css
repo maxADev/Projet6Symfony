@@ -59,6 +59,11 @@ ul li a:hover {
     font-size: 50px;
 }
 
+.trick-modify-container {
+    position: absolute;
+    font-size: 25px;
+}
+
 .home-page-down-button {
     position: absolute;
     bottom: 5px;
@@ -95,10 +100,6 @@ ul li a:hover {
 .trick-container {
     padding-top: 50px;
     display: none;
-}
-
-.trick-card {
-    max-height: 205px;
 }
 
 .text-loading {
@@ -152,6 +153,29 @@ ul li a:hover {
     text-align: right;
 }
 
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content-value {
+    background-color: #fefefe;
+    padding: 25px;
+    border: 1px solid #888;
+}
+
+.card-title a{
+    font-size: 15px;
+    text-transform: uppercase;
+    color: black;
+}
+
 @media screen and (max-width: 1200px) {
     .home-page-text {
         font-size: 85px;
@@ -161,6 +185,12 @@ ul li a:hover {
 @media screen and (max-width: 992px) {
     .home-page-text {
         font-size: 65px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .home-page-text {
+        font-size: 50px;
     }
 
     .trick-asset-container {
@@ -176,12 +206,6 @@ ul li a:hover {
     }
 }
 
-@media screen and (max-width: 768px) {
-    .home-page-text {
-        font-size: 50px;
-    }
-}
-
 @media screen and (max-width: 576px) {
     .home-page-text {
         font-size: 30px;
@@ -189,5 +213,23 @@ ul li a:hover {
 
     .home-page-down-button {
         color: black;
+    }
+
+    .menu-container {
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        z-index: 1;
+    }
+    .menu {
+        width: 100%;
+    }
+
+    .menu-text {
+        display: none;
+    }
+
+    .trick-title {
+        font-size: 25px;
     }
 }

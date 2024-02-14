@@ -8,10 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Trick;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\TrickService;
 use App\Form\Type\TrickType;
+use App\Service\FlashMessageService;
 
 class TrickController extends AbstractController
 {
@@ -52,7 +55,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
            $imageUpload = $form->get('image')->getData();
            $trick->setUser($user);
-           $trickService->createTrick($trick, $imageUpload);
+           $trickService->manageTrick($trick, $imageUpload, 'Le trick a bien été ajouté');
            return $this->redirectToRoute('home');
         }
 
@@ -62,27 +65,37 @@ class TrickController extends AbstractController
     }
 
     #[Route('/modify-trick/{slug}', name: 'modify_trick')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted(
+        attribute: new Expression('user === subject'),
+        subject: new Expression('args["trick"].getUser()'),
+    )]
     public function modifyTrick(Request $request, Trick $trick, TrickService $trickService): Response
     {
-        $user = $this->getUser();
+        $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
 
-        if ($user->getId() === $trick->getUser()->getId()) {
-            $form = $this->createForm(TrickType::class, $trick);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $imageUpload = $form->get('image')->getData();
-                $trickService->updateTrick($trick, $imageUpload);
-                return $this->redirectToRoute('home');
-            }
-
-            return $this->render('trick/updateTrick.html.twig', [
-                'trick' => $trick,
-                'form' => $form,
-            ]);
-        } else {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageUpload = $form->get('image')->getData();
+            $trickService->manageTrick($trick, $imageUpload, 'Le trick a bien été mis à jour');
             return $this->redirectToRoute('home');
         }
+
+        return $this->render('trick/updateTrick.html.twig', [
+            'trick' => $trick,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/delete-trick/{slug}', name: 'delete_trick')]
+    #[IsGranted(
+        attribute: new Expression('user === subject'),
+        subject: new Expression('args["trick"].getUser()'),
+    )]
+    public function deleteTrick(Request $request, Trick $trick, EntityManagerInterface $entityManager, FlashMessageService $flashMessageService): Response
+    {
+        $entityManager->remove($trick);
+        $entityManager->flush();
+        $flashMessageService->createFlashMessage('success', 'Le trick a bien été supprimé');
+        return $this->redirectToRoute('home');
     }
 }

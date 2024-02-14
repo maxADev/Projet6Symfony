@@ -22,7 +22,7 @@ $(document).ready(function() {
                 commentCard = '';
                 $.each(listComment, function (key, val) {
                     commentCard += '<div class="container col-12 col-sm-12 col-lg-9 col-xl-9 d-flex justify-content-center flex-wrap align-items-center comment-container mt-3">';
-                    commentCard += '<div class="container col-4 col-sm-4 col-lg-4 col-xl-2 m-0">';
+                    commentCard += '<div class="container col-4 col-sm-4 col-lg-4 col-xl-3 m-0">';
                     if (listComment[key].userImage) {
                         commentCard += '<img class="user-image" src="/upload/'+listComment[key].userImage+'" alt="Card image cap">';
                     } else {
@@ -31,7 +31,7 @@ $(document).ready(function() {
                     commentCard += '<p class="m-0">'+listComment[key].userName+'</p>';
                     commentCard += '<p class="m-0">Le '+listComment[key].createDate+'</p>';
                     commentCard += '</div>';
-                    commentCard += '<div class="container col-8 col-sm-7 col-lg-8 col-xl-9 m-0">';
+                    commentCard += '<div class="container col-8 col-sm-7 col-lg-8 col-xl-8 m-0">';
                     commentCard += '<p class="m-0">'+listComment[key].content+'</p>';
                     commentCard += '</div>';
                     commentCard += '</div>';

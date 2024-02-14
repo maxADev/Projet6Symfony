@@ -51,7 +51,7 @@ class TrickService
         return $trickList;
     }
 
-    public function createTrick(Trick $trick, Array $imageUpload): void
+    public function manageTrick(Trick $trick, array $imageUpload, string $message)
     {
         if (!is_null($imageUpload)) {
             foreach($imageUpload as $image) {
@@ -63,21 +63,6 @@ class TrickService
         }
 
         $this->trickRepository->save($trick);
-        $this->flashMessageService->createFlashMessage('success', 'Le trick a bien été ajouté');
-    }
-
-    public function updateTrick(Trick $trick, Array $imageUpload): void
-    {
-        if (!is_null($imageUpload)) {
-            foreach($imageUpload as $image) {
-                $imageName = $this->fileUploaderService->upload($image);
-                $trickImage = new TrickImage();
-                $trickImage->setName($imageName);
-                $trick->addTrickImage($trickImage);
-            }
-        }
-
-        $this->trickRepository->save($trick);
-        $this->flashMessageService->createFlashMessage('success', 'Le trick a bien été mis à jour');
+        $this->flashMessageService->createFlashMessage('success', $message);
     }
 }
