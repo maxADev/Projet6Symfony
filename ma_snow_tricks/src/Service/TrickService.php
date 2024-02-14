@@ -51,7 +51,7 @@ class TrickService
         return $trickList;
     }
 
-    public function manageTrick(Trick $trick, array $imageUpload, string $message)
+    public function manageTrick(Trick $trick, array $imageUpload, string $message): void
     {
         if (!is_null($imageUpload)) {
             foreach($imageUpload as $image) {
