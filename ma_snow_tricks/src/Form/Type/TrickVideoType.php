@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Url;
 
 class TrickVideoType extends AbstractType
 {
@@ -19,7 +20,8 @@ class TrickVideoType extends AbstractType
             ->add('link', UrlType::class, [
                 'label' => "Lien",
                 'required'   => false,
-                'constraints' => [new NotBlank(['message' => 'Le lien ne peut être vide'])],
+                'constraints' => [new NotBlank(['message' => 'Le lien ne peut être vide']),
+                                  new Url(['message' => 'Vous devez renseigner une url']),],
             ])
         ;
     }

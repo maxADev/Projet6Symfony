@@ -65,10 +65,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/modify-trick/{slug}', name: 'modify_trick')]
-    #[IsGranted(
-        attribute: new Expression('user === subject'),
-        subject: new Expression('args["trick"].getUser()'),
-    )]
+    #[IsGranted('edit', 'trick')]
     public function modifyTrick(Request $request, Trick $trick, TrickService $trickService): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
@@ -87,10 +84,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/delete-trick/{slug}', name: 'delete_trick')]
-    #[IsGranted(
-        attribute: new Expression('user === subject'),
-        subject: new Expression('args["trick"].getUser()'),
-    )]
+    #[IsGranted('edit', 'trick')]
     public function deleteTrick(Request $request, Trick $trick, EntityManagerInterface $entityManager, FlashMessageService $flashMessageService): Response
     {
         $entityManager->remove($trick);

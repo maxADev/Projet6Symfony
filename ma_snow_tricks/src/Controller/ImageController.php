@@ -18,8 +18,6 @@ class ImageController extends AbstractController
     {
         $token = $request->request->get('token');
         if($this->isCsrfTokenValid($trickImage->getId(), $token)){
-            $imageName = $trickImage->getName();
-            unlink('upload/'.$imageName);
             $entityManager->remove($trickImage);
             $entityManager->flush();
             return new JsonResponse(['success' => 1]);
