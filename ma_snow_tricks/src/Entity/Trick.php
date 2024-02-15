@@ -30,17 +30,9 @@ class Trick implements SlugInterface, DateInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
-    #[Assert\NotBlank(message: 'Vous devez renseigner un titre')]
-    #[Assert\Length(
-        min: 3,
-        max: 150,
-        minMessage: 'Le titre doit faire 3 caractères minimum',
-        maxMessage: 'Le titre doit faire 150 caractères maximum',
-    )]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message: 'Vous devez renseigner une description')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -221,5 +213,10 @@ class Trick implements SlugInterface, DateInterface
         $this->trickGroup = $trickGroup;
 
         return $this;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->user;
     }
 }

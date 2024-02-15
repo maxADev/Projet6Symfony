@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 use App\Entity\Trick;
 use App\Entity\Group;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,9 +36,17 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' =>  'Titre du trick',
+                'constraints' => [new NotBlank(['message' => 'Vous devez renseigner un titre']),
+                                  new Length([
+                                    'min'=> 3,
+                                    'max'=> 15,
+                                    'minMessage'=> 'Le titre doit faire 3 caractères minimum',
+                                    'maxMessage'=> 'Le titre doit faire 150 caractères maximum',
+                                  ])],
             ])
             ->add('description', TextareaType::class, [
                 'label' =>  'Description',
+                'constraints' => [new NotBlank(['message' => 'Vous devez renseigner une description']),],
             ])
             ->add('image', FileType::class, [
                 'mapped' => false,
@@ -74,7 +83,7 @@ class TrickType extends AbstractType
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => Group::class,
-                'choices' => $this->groupRepository->findAll(),
+                'constraints' => [new NotBlank(['message' => 'Vous devez renseigner un groupe']),],
             ])
             ->add('save', SubmitType::class, ['label' => 'Valider']);
     }
