@@ -9,19 +9,19 @@
 <code>git clone https://github.com/maxADev/Projet6Symfony.git</code><br><br>
 2) Changer la configuration de la base de données et du mailer dans le .env du projet<br><br>
 3) Télécharger et installer les dépendances avec composer :
-<br>Exécuter : <code>composer install --no-dev</code>
+<br>Exécuter : <code>composer install --no-dev</code><br>
 Puis : <code>composer dump-autoload -o</code><br><br>
-4) Si la base de données n'existe pas utiliser cette commande pour la créer :
+4) Si la base de données n'existe pas utiliser cette commande pour la créer :<br>
 <code>php bin/console doctrine:database:create</code><br><br>
-5) Ajouter les tables avec cette commande :
+5) Ajouter les tables avec cette commande :<br>
 <code>php bin/console doctrine:migrations:migrate</code><br><br>
-6) Ajouter le contenu prédéfinis avec cette commande :
+6) Ajouter le contenu prédéfinis avec cette commande :<br>
 <code>php bin/console doctrine:fixtures:load</code><br><br>
 
 <h3>Installation sur docker</h3>
 Docker installé et configuré au préalable.<br><br>
 1) Git clone du projet, de préférence sur linux, éviter windows.<br><br>
-2) Aller à la racine du projet puis utiliser cette commande :
-<code>docker-compose up -d</code>
+2) Aller à la racine du projet puis utiliser cette commande :<br>
+<code>docker-compose up -d</code><br>
 Cela devrait créer les containers et les lancers.<br><br>
 3) Suivre les mêmes étapes que l'installation sur serveur.
